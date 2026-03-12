@@ -1,17 +1,144 @@
 ---
 import Layout from "@/layouts/main.astro"
-import { Button } from "@/components/ui/button"
+
+const tools = [
+  {
+    name: "SoloTerm",
+    url: "https://soloterm.com",
+    domain: "soloterm.com",
+    description:
+      "Run Claude Code, Codex, and Gemini CLI alongside your local dev services.",
+  },
+  {
+    name: "cmux",
+    url: "https://cmux.dev",
+    domain: "cmux.dev",
+    description:
+      "A native macOS terminal built for multitasking with AI coding agents.",
+  },
+  {
+    name: "Conductor",
+    url: "https://conductor.build",
+    domain: "conductor.build",
+    description:
+      "Run parallel Codex and Claude Code agents in isolated local workspaces.",
+  },
+  {
+    name: "Superset",
+    url: "https://superset.sh",
+    domain: "superset.sh",
+    description:
+      "Launch and manage many parallel coding agents on your own machine.",
+  },
+  {
+    name: "dmux",
+    url: "https://dmux.ai",
+    domain: "dmux.ai",
+    description:
+      "A tmux pane manager for parallel AI development sessions with worktrees.",
+  },
+  {
+    name: "Codex GUI",
+    url: "https://openai.com/codex/",
+    domain: "openai.com",
+    description:
+      "OpenAI's web app for coding with agents that can complete tasks end to end.",
+  },
+  {
+    name: "OpenCode Desktop",
+    url: "https://opencode.ai",
+    domain: "opencode.ai",
+    description:
+      "Open source AI coding agent you can run in the terminal, IDE, or desktop app.",
+  },
+  {
+    name: "T3 Code",
+    url: "https://t3.codes",
+    domain: "t3.codes",
+    description: "A focused AI coding environment positioned as a fast way to ship.",
+  },
+].sort((a, b) => a.name.localeCompare(b.name))
+
+const issueTitle = "Add missing AI tool: [Tool Name]"
+const issueBody = `## Tool to add
+- Name:
+- Website:
+- GitHub repo:
+
+## Suggested prompt
+Please add [TOOL NAME] to the "Agent Development Environments" list.
+
+Requirements:
+- Pull a short one-line description from the official site.
+`
+const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`
 ---
 
-<Layout>
-  <div class="flex min-h-svh p-6">
-    <div class="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-      <div>
-        <h1 class="font-medium">Project ready!</h1>
-        <p>You may now add components and start building.</p>
-        <p>We've already added the button component for you.</p>
-        <Button client:load className="mt-2">Button</Button>
-      </div>
+<Layout title="AI Agent Environments">
+  <main class="min-h-svh w-full bg-black text-white">
+    <div class="mx-auto w-full max-w-6xl px-6 py-10 sm:px-10 sm:py-14">
+      <header class="mb-8 border-b border-zinc-900 pb-6">
+        <div class="space-y-2">
+          <p class="text-xs tracking-[0.2em] text-zinc-500 uppercase">Featured Tools</p>
+          <h1 class="text-3xl font-medium tracking-tight sm:text-4xl">Agent Development Environments</h1>
+          <p class="max-w-2xl text-base text-zinc-400">
+            Brief picks for building with AI agents. TUI-focused tools are intentionally excluded.
+          </p>
+        </div>
+      </header>
+
+      <section class="grid gap-4 sm:grid-cols-2">
+        {
+          tools.map((tool) => (
+            <a
+              href={tool.url}
+              target="_blank"
+              rel="noreferrer"
+              class="group flex min-h-64 flex-col justify-between border border-zinc-800 bg-black p-6 transition-colors hover:border-zinc-600"
+            >
+              <div>
+                <div class="mb-6 flex items-center gap-4">
+                  <span class="flex size-12 shrink-0 items-center justify-center border border-zinc-800 bg-zinc-950">
+                    <img
+                      src={`https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128`}
+                      alt={`${tool.name} logo`}
+                      loading="lazy"
+                      class="size-7 grayscale"
+                    />
+                  </span>
+                  <div class="min-w-0">
+                    <p class="truncate text-sm text-zinc-500">{tool.url.replace("https://", "")}</p>
+                    <p class="text-2xl leading-tight tracking-tight">{tool.name}</p>
+                  </div>
+                </div>
+                <p class="text-lg leading-relaxed text-zinc-400">{tool.description}</p>
+              </div>
+            </a>
+          ))
+        }
+      </section>
+
+      <footer class="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-zinc-900 pt-6">
+        <p class="text-xs text-zinc-600">
+          site by:
+          <a
+            href="https://www.cruzluna.dev/"
+            target="_blank"
+            rel="noreferrer"
+            class="ml-1 text-zinc-400 underline underline-offset-4 hover:text-zinc-200"
+          >
+            cruzluna.dev
+          </a>
+        </p>
+        <a
+          href={newIssueUrl}
+          target="_blank"
+          rel="noreferrer"
+          class="inline-flex items-center rounded-full border border-zinc-700 px-4 py-2 text-sm text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100"
+        >
+          More
+        </a>
+      </footer>
     </div>
-  </div>
+  </main>
 </Layout>
