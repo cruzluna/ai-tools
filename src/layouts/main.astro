@@ -4,8 +4,17 @@ import "@/styles/global.css"
 const {
   title = "AI Tools",
   description = "Minimal index of AI agent development environments.",
-  ogImage = "/og-image.svg",
+  ogImage = "/og-image-v2.png",
 } = Astro.props
+
+const isLocalhostOrigin = /^https?:\/\/localhost(?::\d+)?$/i.test(Astro.url.origin)
+const baseOrigin = !isLocalhostOrigin ? Astro.url.origin : Astro.site?.toString() ?? ""
+const absoluteOgImage =
+  ogImage.startsWith("http://") || ogImage.startsWith("https://")
+    ? ogImage
+    : baseOrigin
+      ? new URL(ogImage, baseOrigin).toString()
+      : ogImage
 ---
 
 <html lang="en">
@@ -19,12 +28,16 @@ const {
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={absoluteOgImage} />
+    <meta property="og:image:secure_url" content={absoluteOgImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image" content={absoluteOgImage} />
   </head>
   <body>
     <slot />
