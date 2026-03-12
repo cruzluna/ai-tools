@@ -78,16 +78,84 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
   <main class="min-h-svh w-full bg-black text-white">
     <div class="mx-auto w-full max-w-6xl px-6 py-10 sm:px-10 sm:py-14">
       <header class="mb-8 border-b border-zinc-900 pb-6">
-        <div class="space-y-2">
-          <p class="text-xs tracking-[0.2em] text-zinc-500 uppercase">Featured Tools</p>
-          <h1 class="text-3xl font-medium tracking-tight sm:text-4xl">Agent Development Environments</h1>
-          <p class="max-w-2xl text-base text-zinc-400">
-            Brief picks for building with AI agents.
-          </p>
+        <div class="space-y-4">
+          <div class="space-y-2">
+            <p class="text-xs tracking-[0.2em] text-zinc-500 uppercase">Featured Tools</p>
+            <h1 class="text-3xl font-medium tracking-tight sm:text-4xl">Agent Development Environments</h1>
+            <p class="max-w-2xl text-base text-zinc-400">
+              Brief picks for building with AI agents.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 text-xs tracking-[0.2em] uppercase">
+            <p class="text-zinc-600">View:</p>
+            <div data-view-root class="inline-flex items-center gap-2">
+              <button
+                type="button"
+                data-view-button="list"
+                aria-pressed="true"
+                class="text-zinc-100 underline decoration-zinc-400 underline-offset-4 transition-colors hover:text-zinc-200 focus-visible:outline-none"
+              >
+                List
+              </button>
+              <span aria-hidden="true" class="text-zinc-700">/</span>
+              <button
+                type="button"
+                data-view-button="grid"
+                aria-pressed="false"
+                class="text-zinc-500 no-underline transition-colors hover:text-zinc-200 focus-visible:outline-none"
+              >
+                Grid
+              </button>
+            </div>
+          </div>
         </div>
       </header>
 
-      <section class="grid gap-4 sm:grid-cols-2">
+      <section data-view-panel="list" aria-label="Tools list view" class="border border-zinc-800">
+        <ul role="list" class="divide-y divide-zinc-800">
+          {
+            tools.map((tool, index) => (
+              <li>
+                <a
+                  href={tool.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="group flex flex-col gap-4 px-4 py-5 transition-colors hover:bg-zinc-950 sm:grid sm:grid-cols-[minmax(0,1.4fr)_minmax(0,2fr)_auto] sm:items-center sm:gap-6 sm:px-6"
+                >
+                  <div class="flex min-w-0 items-center gap-3">
+                    <p class="w-7 shrink-0 text-xs tabular-nums text-zinc-600">{String(index + 1).padStart(2, "0")}</p>
+                    <span class="flex size-10 shrink-0 items-center justify-center border border-zinc-800 bg-zinc-950">
+                      <img
+                        src={`https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128`}
+                        alt={`${tool.name} logo`}
+                        loading="lazy"
+                        class="size-6 grayscale"
+                      />
+                    </span>
+                    <div class="min-w-0">
+                      <p class="truncate text-base tracking-tight">{tool.name}</p>
+                      <p class="truncate text-xs text-zinc-500">{tool.url.replace("https://", "")}</p>
+                    </div>
+                  </div>
+
+                  <p class="text-sm leading-relaxed text-zinc-400">{tool.description}</p>
+
+                  <p class="text-xs tracking-[0.2em] text-zinc-600 uppercase transition-colors group-hover:text-zinc-300">
+                    Open
+                  </p>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section
+        data-view-panel="grid"
+        aria-label="Tools grid view"
+        class="hidden grid gap-4 sm:grid-cols-2"
+      >
         {
           tools.map((tool) => (
             <a
@@ -140,5 +208,46 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
         </a>
       </footer>
     </div>
+
+    <script>
+      const STORAGE_KEY = "tools-view"
+      const root = document.querySelector("[data-view-root]")
+      const listPanel = document.querySelector('[data-view-panel="list"]')
+      const gridPanel = document.querySelector('[data-view-panel="grid"]')
+
+      if (root && listPanel && gridPanel) {
+        const buttons = Array.from(root.querySelectorAll("[data-view-button]"))
+
+        const applyView = (view) => {
+          const useGrid = view === "grid"
+
+          listPanel.classList.toggle("hidden", useGrid)
+          gridPanel.classList.toggle("hidden", !useGrid)
+
+          for (const button of buttons) {
+            const isActive = button.dataset.viewButton === view
+            button.setAttribute("aria-pressed", isActive ? "true" : "false")
+            button.classList.toggle("text-zinc-100", isActive)
+            button.classList.toggle("underline", isActive)
+            button.classList.toggle("decoration-zinc-400", isActive)
+            button.classList.toggle("underline-offset-4", isActive)
+            button.classList.toggle("text-zinc-500", !isActive)
+            button.classList.toggle("no-underline", !isActive)
+          }
+        }
+
+        const savedView = localStorage.getItem(STORAGE_KEY)
+        const initialView = savedView === "grid" ? "grid" : "list"
+        applyView(initialView)
+
+        for (const button of buttons) {
+          button.addEventListener("click", () => {
+            const nextView = button.dataset.viewButton === "grid" ? "grid" : "list"
+            applyView(nextView)
+            localStorage.setItem(STORAGE_KEY, nextView)
+          })
+        }
+      }
+    </script>
   </main>
 </Layout>
