@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="AI Tools favicon">
-  <rect width="64" height="64" rx="12" fill="#000"/>
-  <path d="M20 46l9-28h6l9 28h-6.3l-1.9-6.4h-8.2L25.7 46H20zm9.4-11.3h5.2L32 25.8l-2.6 8.9z" fill="#fff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Terminal outline favicon">
+  <rect x="8" y="12" width="48" height="40" rx="8" fill="none" stroke="#000" stroke-width="4"/>
+  <path d="M18 26l8 6-8 6" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 38h14" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round"/>
 </svg>
