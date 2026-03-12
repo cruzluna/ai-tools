@@ -1,36 +1,25 @@
-# Astro + React + TypeScript + shadcn/ui
+# ade.codes
 
-This is a template for a new Astro project with React, TypeScript, and shadcn/ui.
-
-## Adding components
-
-To add components to your app, run the following command:
+## Setup
 
 ```bash
-npx shadcn@latest add button
+bun install
 ```
 
-This will place the ui components in the `src/components` directory.
+## Run
 
-## Using components
+```bash
+bun run dev
+```
 
-To use the components in your app, import them in an `.astro` file:
+## Build
 
-```astro
----
-import { Button } from "@/components/ui/button"
----
+```bash
+bun run build
+```
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Astro App</title>
-  </head>
-  <body>
-    <div class="grid h-screen place-items-center content-center">
-      <Button>Button</Button>
-    </div>
-  </body>
-</html>
+## Lint
+
+```bash
+bun run lint
 ```
