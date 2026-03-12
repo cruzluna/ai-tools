@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Agent Development Environments">
+  <rect width="1200" height="630" fill="#000000"/>
+  <rect x="40" y="40" width="1120" height="550" fill="none" stroke="#27272a" stroke-width="2"/>
+  <text x="80" y="270" fill="#a1a1aa" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="34" letter-spacing="8">AI TOOLS</text>
+  <text x="80" y="360" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="76" font-weight="600">Agent Development</text>
+  <text x="80" y="448" fill="#ffffff" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="76" font-weight="600">Environments</text>
+  <text x="80" y="530" fill="#71717a" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="30">Minimal index of modern AI agent tools</text>
+</svg>
