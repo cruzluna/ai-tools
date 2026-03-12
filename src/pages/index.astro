@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/main.astro"
 
-const tools = [
+const environmentTools = [
   {
     name: "SoloTerm",
     url: "https://soloterm.com",
@@ -57,7 +57,89 @@ const tools = [
     domain: "t3.codes",
     description: "A focused AI coding environment positioned as a fast way to ship.",
   },
+]
+
+const cliTuiTools = [
+  {
+    name: "Aider",
+    url: "https://aider.chat/",
+    domain: "aider.chat",
+    description: "Open source AI pair programmer that edits code directly in your repo.",
+  },
+  {
+    name: "Amp",
+    url: "https://ampcode.com/",
+    domain: "ampcode.com",
+    description: "Terminal-first AI coding assistant for running agentic development workflows.",
+  },
+  {
+    name: "Claude Code",
+    url: "https://code.claude.com/docs/en/overview",
+    domain: "claude.com",
+    description: "Anthropic's terminal coding agent for codebase-aware edits and execution.",
+  },
+  {
+    name: "Cline CLI",
+    url: "https://cline.bot/cli",
+    domain: "cline.bot",
+    description: "Command-line interface for running Cline's coding agent from your terminal.",
+  },
+  {
+    name: "Codex CLI",
+    url: "https://developers.openai.com/codex/cli/",
+    domain: "openai.com",
+    description: "OpenAI's command-line coding agent for terminal-native software tasks.",
+  },
+  {
+    name: "Copilot CLI",
+    url: "https://github.com/features/copilot/cli",
+    domain: "github.com",
+    description: "GitHub Copilot in the terminal for generating and explaining shell commands.",
+  },
+  {
+    name: "Cursor CLI",
+    url: "https://cursor.com/cli",
+    domain: "cursor.com",
+    description: "Cursor's CLI for running coding and agent workflows outside the editor.",
+  },
+  {
+    name: "Kiro CLI",
+    url: "https://kiro.dev/cli/",
+    domain: "kiro.dev",
+    description: "Kiro command-line tooling for building and shipping with AI coding agents.",
+  },
+  {
+    name: "OpenCode CLI",
+    url: "https://opencode.ai/docs/cli/",
+    domain: "opencode.ai",
+    description: "OpenCode's CLI for running coding sessions from the terminal.",
+  },
+  {
+    name: "Pi Agent",
+    url: "https://shittycodingagent.ai/",
+    domain: "shittycodingagent.ai",
+    description: "Terminal-native AI coding agent for command-line development workflows.",
+  },
+]
+
+const tools = [
+  ...environmentTools.map((tool) => ({ ...tool, category: "environment" })),
+  ...cliTuiTools.map((tool) => ({ ...tool, category: "cli-tui" })),
 ].sort((a, b) => a.name.localeCompare(b.name))
+
+const filterOptions = [
+  { id: "all", label: "All", count: tools.length },
+  {
+    id: "environment",
+    label: "ADE",
+    count: tools.filter((tool) => tool.category === "environment").length,
+  },
+  {
+    id: "cli-tui",
+    label: "CLI/TUI",
+    count: tools.filter((tool) => tool.category === "cli-tui").length,
+  },
+]
 
 const issueTitle = "Add missing AI tool: [Tool Name]"
 const issueBody = `## Tool to add
@@ -66,7 +148,7 @@ const issueBody = `## Tool to add
 - GitHub repo:
 
 ## Suggested prompt
-Please add [TOOL NAME] to the "Agent Development Environments" list.
+Please add [TOOL NAME] to the tool list.
 
 Requirements:
 - Pull a short one-line description from the official site.
@@ -82,31 +164,53 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
           <div class="space-y-2">
             <p class="text-xs tracking-[0.2em] text-zinc-500 uppercase">Featured Tools</p>
             <h1 class="text-3xl font-medium tracking-tight sm:text-4xl">Agent Development Environments</h1>
-            <p class="max-w-2xl text-base text-zinc-400">
-              Brief picks for building with AI agents.
-            </p>
+            <p class="max-w-2xl text-base text-zinc-400">Brief picks for building with AI agents.</p>
           </div>
 
-          <div class="flex items-center gap-2 text-xs tracking-[0.2em] uppercase">
-            <p class="text-zinc-600">View:</p>
-            <div data-view-root class="inline-flex items-center gap-2">
-              <button
-                type="button"
-                data-view-button="list"
-                aria-pressed="true"
-                class="text-zinc-100 underline decoration-zinc-400 underline-offset-4 transition-colors hover:text-zinc-200 focus-visible:outline-none"
-              >
-                List
-              </button>
-              <span aria-hidden="true" class="text-zinc-700">/</span>
-              <button
-                type="button"
-                data-view-button="grid"
-                aria-pressed="false"
-                class="text-zinc-500 no-underline transition-colors hover:text-zinc-200 focus-visible:outline-none"
-              >
-                Grid
-              </button>
+          <div data-controls-root class="space-y-3 text-xs tracking-[0.2em] uppercase">
+            <div class="flex flex-wrap items-center gap-2">
+              <p class="text-zinc-600">View:</p>
+              <div class="inline-flex items-center gap-2">
+                <button
+                  type="button"
+                  data-view-button="list"
+                  aria-pressed="true"
+                  class="text-zinc-100 underline decoration-zinc-400 underline-offset-4 transition-colors hover:text-zinc-200 focus-visible:outline-none"
+                >
+                  List
+                </button>
+                <span aria-hidden="true" class="text-zinc-700">/</span>
+                <button
+                  type="button"
+                  data-view-button="grid"
+                  aria-pressed="false"
+                  class="text-zinc-500 no-underline transition-colors hover:text-zinc-200 focus-visible:outline-none"
+                >
+                  Grid
+                </button>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <p class="text-zinc-600">Filter:</p>
+              <div class="inline-flex flex-wrap items-center gap-2">
+                {
+                  filterOptions.map((option, index) => (
+                    <button
+                      type="button"
+                      data-filter-button={option.id}
+                      aria-pressed={index === 0 ? "true" : "false"}
+                      class:list={[
+                        "rounded-full border px-3 py-1 transition-colors hover:text-zinc-200 focus-visible:outline-none",
+                        index === 0 ? "border-zinc-300 text-zinc-100" : "border-zinc-700 text-zinc-500",
+                      ]}
+                    >
+                      {option.label} ({option.count})
+                    </button>
+                  ))
+                }
+              </div>
+              <p data-tools-count class="ml-1 text-zinc-600">{tools.length} tools</p>
             </div>
           </div>
         </div>
@@ -116,7 +220,7 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
         <ul role="list" class="divide-y divide-zinc-800">
           {
             tools.map((tool, index) => (
-              <li>
+              <li data-tool-item data-category={tool.category}>
                 <a
                   href={tool.url}
                   target="_blank"
@@ -124,7 +228,9 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                   class="group flex flex-col gap-4 px-4 py-5 transition-colors hover:bg-zinc-950 sm:grid sm:grid-cols-[minmax(0,1.4fr)_minmax(0,2fr)_auto] sm:items-center sm:gap-6 sm:px-6"
                 >
                   <div class="flex min-w-0 items-center gap-3">
-                    <p class="w-7 shrink-0 text-xs tabular-nums text-zinc-600">{String(index + 1).padStart(2, "0")}</p>
+                    <p data-list-number class="w-7 shrink-0 text-xs tabular-nums text-zinc-600">
+                      {String(index + 1).padStart(2, "0")}
+                    </p>
                     <span class="flex size-10 shrink-0 items-center justify-center border border-zinc-800 bg-zinc-950">
                       <img
                         src={`https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128`}
@@ -141,8 +247,8 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
 
                   <p class="text-sm leading-relaxed text-zinc-400">{tool.description}</p>
 
-                  <p class="text-xs tracking-[0.2em] text-zinc-600 uppercase transition-colors group-hover:text-zinc-300">
-                    Open
+                  <p class="text-xs tracking-[0.2em] text-zinc-600 uppercase">
+                    {tool.category === "environment" ? "ADE" : "CLI/TUI"}
                   </p>
                 </a>
               </li>
@@ -151,14 +257,12 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
         </ul>
       </section>
 
-      <section
-        data-view-panel="grid"
-        aria-label="Tools grid view"
-        class="hidden grid gap-4 sm:grid-cols-2"
-      >
+      <section data-view-panel="grid" aria-label="Tools grid view" class="hidden grid gap-4 sm:grid-cols-2">
         {
           tools.map((tool) => (
             <a
+              data-tool-item
+              data-category={tool.category}
               href={tool.url}
               target="_blank"
               rel="noreferrer"
@@ -177,6 +281,9 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                   <div class="min-w-0">
                     <p class="truncate text-sm text-zinc-500">{tool.url.replace("https://", "")}</p>
                     <p class="text-2xl leading-tight tracking-tight">{tool.name}</p>
+                    <p class="mt-1 text-xs tracking-[0.2em] text-zinc-600 uppercase">
+                      {tool.category === "environment" ? "ADE" : "CLI/TUI"}
+                    </p>
                   </div>
                 </div>
                 <p class="text-lg leading-relaxed text-zinc-400">{tool.description}</p>
@@ -210,41 +317,99 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
     </div>
 
     <script>
-      const STORAGE_KEY = "tools-view"
-      const root = document.querySelector("[data-view-root]")
+      const VIEW_STORAGE_KEY = "tools-view"
+      const FILTER_STORAGE_KEY = "tools-filter"
+
+      const controlsRoot = document.querySelector("[data-controls-root]")
       const listPanel = document.querySelector('[data-view-panel="list"]')
       const gridPanel = document.querySelector('[data-view-panel="grid"]')
 
-      if (root && listPanel && gridPanel) {
-        const buttons = Array.from(root.querySelectorAll("[data-view-button]"))
+      if (controlsRoot && listPanel && gridPanel) {
+        const viewButtons = Array.from(controlsRoot.querySelectorAll("[data-view-button]"))
+        const filterButtons = Array.from(controlsRoot.querySelectorAll("[data-filter-button]"))
+        const listItems = Array.from(listPanel.querySelectorAll("[data-tool-item]"))
+        const gridItems = Array.from(gridPanel.querySelectorAll("[data-tool-item]"))
+        const countLabel = document.querySelector("[data-tools-count]")
 
-        const applyView = (view) => {
-          const useGrid = view === "grid"
-
-          listPanel.classList.toggle("hidden", useGrid)
-          gridPanel.classList.toggle("hidden", !useGrid)
-
+        const applyButtonState = (buttons, activeValue, key) => {
           for (const button of buttons) {
-            const isActive = button.dataset.viewButton === view
+            const isActive = button.dataset[key] === activeValue
             button.setAttribute("aria-pressed", isActive ? "true" : "false")
+
             button.classList.toggle("text-zinc-100", isActive)
-            button.classList.toggle("underline", isActive)
-            button.classList.toggle("decoration-zinc-400", isActive)
-            button.classList.toggle("underline-offset-4", isActive)
             button.classList.toggle("text-zinc-500", !isActive)
-            button.classList.toggle("no-underline", !isActive)
+            button.classList.toggle("border-zinc-300", isActive)
+            button.classList.toggle("border-zinc-700", !isActive)
+
+            if (key === "viewButton") {
+              button.classList.toggle("underline", isActive)
+              button.classList.toggle("decoration-zinc-400", isActive)
+              button.classList.toggle("underline-offset-4", isActive)
+              button.classList.toggle("no-underline", !isActive)
+            }
           }
         }
 
-        const savedView = localStorage.getItem(STORAGE_KEY)
+        const applyView = (view) => {
+          const useGrid = view === "grid"
+          listPanel.classList.toggle("hidden", useGrid)
+          gridPanel.classList.toggle("hidden", !useGrid)
+          applyButtonState(viewButtons, view, "viewButton")
+        }
+
+        const applyFilter = (filter) => {
+          let visibleCount = 0
+          let visibleIndex = 1
+
+          for (const item of listItems) {
+            const isVisible = filter === "all" || item.dataset.category === filter
+            item.classList.toggle("hidden", !isVisible)
+
+            if (isVisible) {
+              const number = item.querySelector("[data-list-number]")
+              if (number) {
+                number.textContent = String(visibleIndex).padStart(2, "0")
+              }
+              visibleIndex += 1
+              visibleCount += 1
+            }
+          }
+
+          for (const item of gridItems) {
+            const isVisible = filter === "all" || item.dataset.category === filter
+            item.classList.toggle("hidden", !isVisible)
+          }
+
+          if (countLabel) {
+            countLabel.textContent = `${visibleCount} tools`
+          }
+
+          applyButtonState(filterButtons, filter, "filterButton")
+        }
+
+        const savedView = localStorage.getItem(VIEW_STORAGE_KEY)
+        const savedFilter = localStorage.getItem(FILTER_STORAGE_KEY)
+
         const initialView = savedView === "grid" ? "grid" : "list"
+        const initialFilter =
+          savedFilter === "environment" || savedFilter === "cli-tui" ? savedFilter : "all"
+
+        applyFilter(initialFilter)
         applyView(initialView)
 
-        for (const button of buttons) {
+        for (const button of viewButtons) {
           button.addEventListener("click", () => {
             const nextView = button.dataset.viewButton === "grid" ? "grid" : "list"
             applyView(nextView)
-            localStorage.setItem(STORAGE_KEY, nextView)
+            localStorage.setItem(VIEW_STORAGE_KEY, nextView)
+          })
+        }
+
+        for (const button of filterButtons) {
+          button.addEventListener("click", () => {
+            const nextFilter = button.dataset.filterButton ?? "all"
+            applyFilter(nextFilter)
+            localStorage.setItem(FILTER_STORAGE_KEY, nextFilter)
           })
         }
       }
