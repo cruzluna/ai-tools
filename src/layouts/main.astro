@@ -4,17 +4,22 @@ import "@/styles/global.css"
 const {
   title = "AI Tools",
   description = "Minimal index of AI agent development environments.",
-  ogImage = "/og-image-v2.png",
+  ogImage = "/og-image.png",
+  ogImageAlt,
 } = Astro.props
 
-const isLocalhostOrigin = /^https?:\/\/localhost(?::\d+)?$/i.test(Astro.url.origin)
-const baseOrigin = !isLocalhostOrigin ? Astro.url.origin : Astro.site?.toString() ?? ""
+// X/Twitter requires absolute URLs for og:image - use site config or request origin
+const siteOrigin = Astro.site?.toString().replace(/\/$/, "") ?? ""
+const requestOrigin = Astro.url.origin
+const isLocalhost = /^https?:\/\/localhost(?::\d+)?$/i.test(requestOrigin)
+const baseOrigin = siteOrigin || (isLocalhost ? "" : requestOrigin)
 const absoluteOgImage =
   ogImage.startsWith("http://") || ogImage.startsWith("https://")
     ? ogImage
     : baseOrigin
       ? new URL(ogImage, baseOrigin).toString()
       : ogImage
+const imageAlt = ogImageAlt ?? title
 ---
 
 <html lang="en">
@@ -38,6 +43,7 @@ const absoluteOgImage =
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={absoluteOgImage} />
+    <meta name="twitter:image:alt" content={imageAlt} />
   </head>
   <body>
     <slot />
