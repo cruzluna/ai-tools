@@ -143,10 +143,104 @@ const cliTuiTools = [
   },
 ]
 
+const agentFrameworkTools = [
+  {
+    name: "AI SDK (Vercel)",
+    url: "https://ai-sdk.dev/docs/introduction",
+    domain: "ai-sdk.dev",
+    description:
+      "Type-safe toolkit for building AI chat apps and agent workflows. Languages: TypeScript, JavaScript.",
+  },
+  {
+    name: "Anthropic SDK",
+    url: "https://platform.claude.com/docs/en/api/client-sdks",
+    domain: "anthropic.com",
+    description:
+      "Official Claude API client SDKs for production integrations. Languages: Python, TypeScript, Java, Go, Ruby, C#, PHP.",
+  },
+  {
+    name: "OpenAI App Server",
+    url: "https://developers.openai.com/codex/app-server/",
+    domain: "openai.com",
+    description:
+      "Codex app server for harnessing coding-agent threads via JSON-RPC. Languages: language-agnostic protocol (official SDK in TypeScript).",
+  },
+  {
+    name: "Kimi Agent SDK",
+    url: "https://github.com/MoonshotAI/kimi-agent-sdk",
+    domain: "github.com",
+    description:
+      "Programmatic SDK for integrating Moonshot's Kimi agent runtime. Languages: Python, TypeScript/Node.js, Go.",
+  },
+  {
+    name: "CrewAI",
+    url: "https://github.com/crewAIInc/crewAI",
+    domain: "github.com",
+    description:
+      "Framework for orchestrating role-based multi-agent workflows. Languages: Python.",
+  },
+  {
+    name: "Strands Agents",
+    url: "https://strandsagents.com/",
+    domain: "strandsagents.com",
+    description:
+      "Model-driven SDK for composing tools, memory, and agent loops. Languages: Python, TypeScript.",
+  },
+  {
+    name: "Pi (SDK)",
+    url: "https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent#programmatic-usage",
+    domain: "github.com",
+    description:
+      "Programmatic interface for embedding the Pi coding agent in apps. Languages: TypeScript, JavaScript.",
+  },
+  {
+    name: "OpenCode SDK",
+    url: "https://opencode.ai/docs/sdk/",
+    domain: "opencode.ai",
+    description:
+      "Type-safe SDK for integrating OpenCode agents and sessions. Languages: TypeScript, JavaScript.",
+  },
+  {
+    name: "Qwen-Agent",
+    url: "https://qwenlm.github.io/Qwen-Agent/",
+    domain: "qwenlm.github.io",
+    description:
+      "Framework for tool use, planning, and memory with Qwen models. Languages: Python.",
+  },
+  {
+    name: "LangGraph",
+    url: "https://www.langchain.com/langgraph",
+    domain: "langchain.com",
+    description:
+      "Stateful graph framework for durable, multi-step agent workflows. Languages: Python, TypeScript.",
+  },
+  {
+    name: "PydanticAI",
+    url: "https://ai.pydantic.dev/",
+    domain: "ai.pydantic.dev",
+    description:
+      "Type-safe agent framework built around Pydantic models and validation. Languages: Python.",
+  },
+  {
+    name: "OpenAI Agents SDK",
+    url: "https://developers.openai.com/api/docs/guides/agents-sdk/",
+    domain: "openai.com",
+    description:
+      "OpenAI's agent orchestration SDK with tools, handoffs, and guardrails. Languages: Python, TypeScript.",
+  },
+]
+
 const tools = [
   ...environmentTools.map((tool) => ({ ...tool, category: "environment" })),
   ...cliTuiTools.map((tool) => ({ ...tool, category: "cli-tui" })),
+  ...agentFrameworkTools.map((tool) => ({ ...tool, category: "agent-frameworks" })),
 ].sort((a, b) => a.name.localeCompare(b.name))
+
+const categoryLabels = {
+  environment: "ADE",
+  "cli-tui": "CLI/TUI",
+  "agent-frameworks": "Agent Frameworks",
+} as const
 
 const filterOptions = [
   { id: "all", label: "All", count: tools.length },
@@ -159,6 +253,11 @@ const filterOptions = [
     id: "cli-tui",
     label: "CLI/TUI",
     count: tools.filter((tool) => tool.category === "cli-tui").length,
+  },
+  {
+    id: "agent-frameworks",
+    label: "Agent Frameworks",
+    count: tools.filter((tool) => tool.category === "agent-frameworks").length,
   },
 ]
 
@@ -269,7 +368,7 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                   <p class="text-sm leading-relaxed text-zinc-400">{tool.description}</p>
 
                   <p class="text-xs tracking-[0.2em] text-zinc-600 uppercase">
-                    {tool.category === "environment" ? "ADE" : "CLI/TUI"}
+                    {categoryLabels[tool.category] ?? tool.category}
                   </p>
                 </a>
               </li>
@@ -303,7 +402,7 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                     <p class="truncate text-sm text-zinc-500">{tool.url.replace("https://", "")}</p>
                     <p class="text-2xl leading-tight tracking-tight">{tool.name}</p>
                     <p class="mt-1 text-xs tracking-[0.2em] text-zinc-600 uppercase">
-                      {tool.category === "environment" ? "ADE" : "CLI/TUI"}
+                      {categoryLabels[tool.category] ?? tool.category}
                     </p>
                   </div>
                 </div>
@@ -416,7 +515,11 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
 
         const initialView = savedView === "grid" ? "grid" : "list"
         const initialFilter =
-          savedFilter === "environment" || savedFilter === "cli-tui" ? savedFilter : "all"
+          savedFilter === "environment" ||
+          savedFilter === "cli-tui" ||
+          savedFilter === "agent-frameworks"
+            ? savedFilter
+            : "all"
 
         applyFilter(initialFilter)
         applyView(initialView)
