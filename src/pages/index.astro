@@ -1,7 +1,23 @@
 ---
 import Layout from "@/layouts/main.astro"
 
-const environmentTools = [
+type ToolCategory = "environment" | "cli-tui" | "agents-sdk"
+
+type ToolSeed = {
+  name: string
+  url: string
+  domain: string
+  description: string
+  languages?: string[]
+}
+
+type Tool = ToolSeed & {
+  category: ToolCategory
+}
+
+const formatLanguages = (languages?: string[]) => (languages ? languages.join(", ") : "")
+
+const environmentTools: ToolSeed[] = [
   {
     name: "SoloTerm",
     url: "https://soloterm.com",
@@ -80,7 +96,7 @@ const environmentTools = [
   },
 ]
 
-const cliTuiTools = [
+const cliTuiTools: ToolSeed[] = [
   {
     name: "Aider",
     url: "https://aider.chat/",
@@ -143,10 +159,107 @@ const cliTuiTools = [
   },
 ]
 
-const tools = [
-  ...environmentTools.map((tool) => ({ ...tool, category: "environment" })),
-  ...cliTuiTools.map((tool) => ({ ...tool, category: "cli-tui" })),
+const agentsSdkTools: ToolSeed[] = [
+  {
+    name: "AI SDK (Vercel)",
+    url: "https://ai-sdk.dev/docs/introduction",
+    domain: "ai-sdk.dev",
+    description: "Type-safe toolkit for building AI chat apps and agent workflows.",
+    languages: ["TypeScript", "JavaScript"],
+  },
+  {
+    name: "Anthropic SDK",
+    url: "https://platform.claude.com/docs/en/api/client-sdks",
+    domain: "anthropic.com",
+    description: "Official Claude API client SDKs for production integrations.",
+    languages: ["Python", "TypeScript", "Java", "Go", "Ruby", "C#", "PHP"],
+  },
+  {
+    name: "OpenAI App Server",
+    url: "https://developers.openai.com/codex/app-server/",
+    domain: "openai.com",
+    description: "Codex app server for harnessing coding-agent threads via JSON-RPC.",
+    languages: ["Language-agnostic protocol", "TypeScript (official SDK)"],
+  },
+  {
+    name: "Kimi Agent SDK",
+    url: "https://github.com/MoonshotAI/kimi-agent-sdk",
+    domain: "github.com",
+    description: "Programmatic SDK for integrating Moonshot's Kimi agent runtime.",
+    languages: ["Python", "TypeScript/Node.js", "Go"],
+  },
+  {
+    name: "CrewAI",
+    url: "https://github.com/crewAIInc/crewAI",
+    domain: "github.com",
+    description: "Framework for orchestrating role-based multi-agent workflows.",
+    languages: ["Python"],
+  },
+  {
+    name: "Strands Agents",
+    url: "https://strandsagents.com/",
+    domain: "strandsagents.com",
+    description: "Model-driven SDK for composing tools, memory, and agent loops.",
+    languages: ["Python", "TypeScript"],
+  },
+  {
+    name: "Pi (SDK)",
+    url: "https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent#programmatic-usage",
+    domain: "github.com",
+    description: "Programmatic interface for embedding the Pi coding agent in apps.",
+    languages: ["TypeScript", "JavaScript"],
+  },
+  {
+    name: "OpenCode SDK",
+    url: "https://opencode.ai/docs/sdk/",
+    domain: "opencode.ai",
+    description: "Type-safe SDK for integrating OpenCode agents and sessions.",
+    languages: ["TypeScript", "JavaScript"],
+  },
+  {
+    name: "Qwen-Agent",
+    url: "https://qwenlm.github.io/Qwen-Agent/",
+    domain: "qwenlm.github.io",
+    description: "Framework for tool use, planning, and memory with Qwen models.",
+    languages: ["Python"],
+  },
+  {
+    name: "LangGraph",
+    url: "https://www.langchain.com/langgraph",
+    domain: "langchain.com",
+    description: "Stateful graph framework for durable, multi-step agent workflows.",
+    languages: ["Python", "TypeScript"],
+  },
+  {
+    name: "PydanticAI",
+    url: "https://ai.pydantic.dev/",
+    domain: "ai.pydantic.dev",
+    description: "Type-safe agent framework built around Pydantic models and validation.",
+    languages: ["Python"],
+  },
+  {
+    name: "OpenAI Agents SDK",
+    url: "https://developers.openai.com/api/docs/guides/agents-sdk/",
+    domain: "openai.com",
+    description: "OpenAI's agent orchestration SDK with tools, handoffs, and guardrails.",
+    languages: ["Python", "TypeScript"],
+  },
+]
+
+const withCategory = (category: ToolCategory, toolList: ToolSeed[]): Tool[] =>
+  toolList.map((tool) => ({ ...tool, category }))
+
+const tools: Tool[] = [
+  ...withCategory("environment", environmentTools),
+  ...withCategory("cli-tui", cliTuiTools),
+  ...withCategory("agents-sdk", agentsSdkTools),
 ].sort((a, b) => a.name.localeCompare(b.name))
+
+const categoryLabels: Record<ToolCategory, string> = {
+  environment: "ADE",
+  "cli-tui": "CLI/TUI",
+  "agents-sdk": "Agents SDK",
+}
 
 const filterOptions = [
   { id: "all", label: "All", count: tools.length },
@@ -159,6 +272,11 @@ const filterOptions = [
     id: "cli-tui",
     label: "CLI/TUI",
     count: tools.filter((tool) => tool.category === "cli-tui").length,
+  },
+  {
+    id: "agents-sdk",
+    label: "Agents SDK",
+    count: tools.filter((tool) => tool.category === "agents-sdk").length,
   },
 ]
 
@@ -246,7 +364,7 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                   href={tool.url}
                   target="_blank"
                   rel="noreferrer"
-                  class="group flex flex-col gap-4 px-4 py-5 transition-colors hover:bg-zinc-950 sm:grid sm:grid-cols-[minmax(0,1.4fr)_minmax(0,2fr)_auto] sm:items-center sm:gap-6 sm:px-6"
+                  class="group flex flex-col gap-4 px-4 py-5 transition-colors hover:bg-zinc-950 sm:grid sm:grid-cols-[minmax(0,1.4fr)_minmax(0,2fr)_9rem] sm:items-start sm:gap-6 sm:px-6"
                 >
                   <div class="flex min-w-0 items-center gap-3">
                     <p data-list-number class="w-7 shrink-0 text-xs tabular-nums text-zinc-600">
@@ -266,10 +384,19 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                     </div>
                   </div>
 
-                  <p class="text-sm leading-relaxed text-zinc-400">{tool.description}</p>
+                  <div class="space-y-1 text-left">
+                    <p class="text-sm leading-relaxed text-zinc-400">{tool.description}</p>
+                    {
+                      tool.languages && (
+                        <p class="text-xs leading-relaxed text-zinc-500">
+                          Languages: {formatLanguages(tool.languages)}
+                        </p>
+                      )
+                    }
+                  </div>
 
                   <p class="text-xs tracking-[0.2em] text-zinc-600 uppercase">
-                    {tool.category === "environment" ? "ADE" : "CLI/TUI"}
+                    {categoryLabels[tool.category] ?? tool.category}
                   </p>
                 </a>
               </li>
@@ -303,11 +430,20 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                     <p class="truncate text-sm text-zinc-500">{tool.url.replace("https://", "")}</p>
                     <p class="text-2xl leading-tight tracking-tight">{tool.name}</p>
                     <p class="mt-1 text-xs tracking-[0.2em] text-zinc-600 uppercase">
-                      {tool.category === "environment" ? "ADE" : "CLI/TUI"}
+                      {categoryLabels[tool.category] ?? tool.category}
                     </p>
                   </div>
                 </div>
-                <p class="text-lg leading-relaxed text-zinc-400">{tool.description}</p>
+                <div class="space-y-2 text-left">
+                  <p class="text-lg leading-relaxed text-zinc-400">{tool.description}</p>
+                  {
+                    tool.languages && (
+                      <p class="text-sm leading-relaxed text-zinc-500">
+                        Languages: {formatLanguages(tool.languages)}
+                      </p>
+                    )
+                  }
+                </div>
               </div>
             </a>
           ))
@@ -416,7 +552,11 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
 
         const initialView = savedView === "grid" ? "grid" : "list"
         const initialFilter =
-          savedFilter === "environment" || savedFilter === "cli-tui" ? savedFilter : "all"
+          savedFilter === "environment" ||
+          savedFilter === "cli-tui" ||
+          savedFilter === "agents-sdk"
+            ? savedFilter
+            : "all"
 
         applyFilter(initialFilter)
         applyView(initialView)
