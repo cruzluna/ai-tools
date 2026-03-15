@@ -2,6 +2,7 @@
 import Layout from "@/layouts/main.astro"
 
 type ToolCategory = "environment" | "sandboxes" | "cli-tui" | "agents-sdk"
+type FilterId = ToolCategory | "all"
 
 type ToolSeed = {
   name: string
@@ -309,29 +310,69 @@ const categoryLabels: Record<ToolCategory, string> = {
   "agents-sdk": "Agents SDK",
 }
 
+const filterPathById: Record<FilterId, string> = {
+  all: "/",
+  environment: "/environment",
+  sandboxes: "/sandboxes",
+  "cli-tui": "/cli-tui",
+  "agents-sdk": "/agents-sdk",
+}
+
+const normalizePathname = (pathname: string) =>
+  pathname !== "/" && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname
+
+const getFilterFromPathname = (pathname: string): FilterId => {
+  const normalizedPath = normalizePathname(pathname)
+  for (const [id, path] of Object.entries(filterPathById)) {
+    if (path === normalizedPath) {
+      return id as FilterId
+    }
+  }
+  return "all"
+}
+
+const isVisibleForFilter = (tool: Tool, filter: FilterId) =>
+  filter === "all" || tool.category === filter
+
+const initialFilter = getFilterFromPathname(Astro.url.pathname)
+const initialVisibilityByIndex = tools.map((tool) => isVisibleForFilter(tool, initialFilter))
+let initialListNumber = 0
+const initialListNumbersByIndex = initialVisibilityByIndex.map((isVisible) => {
+  if (!isVisible) {
+    return ""
+  }
+  initialListNumber += 1
+  return String(initialListNumber).padStart(2, "0")
+})
+const initialVisibleCount = tools.filter((tool) => isVisibleForFilter(tool, initialFilter)).length
+
 const filterOptions = [
-  { id: "all", label: "All", count: tools.length },
+  { id: "all", label: "All", path: filterPathById.all, count: tools.length },
   {
     id: "environment",
     label: "ADE",
+    path: filterPathById.environment,
     count: tools.filter((tool) => tool.category === "environment").length,
   },
   {
     id: "sandboxes",
     label: "Sandboxes",
+    path: filterPathById.sandboxes,
     count: tools.filter((tool) => tool.category === "sandboxes").length,
   },
   {
     id: "cli-tui",
     label: "CLI/TUI",
+    path: filterPathById["cli-tui"],
     count: tools.filter((tool) => tool.category === "cli-tui").length,
   },
   {
     id: "agents-sdk",
     label: "Agents SDK",
+    path: filterPathById["agents-sdk"],
     count: tools.filter((tool) => tool.category === "agents-sdk").length,
   },
-]
+] satisfies Array<{ id: FilterId; label: string; path: string; count: number }>
 
 const issueTitle = "Add missing AI tool: [Tool Name]"
 const issueBody = `## Tool to add
@@ -359,7 +400,12 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
             <p class="max-w-2xl text-base text-zinc-400">Brief picks for building with AI agents.</p>
           </div>
 
-          <div data-controls-root class="space-y-3 text-xs tracking-[0.2em] uppercase">
+          <div
+            data-controls-root
+            data-initial-filter={initialFilter}
+            data-filter-paths={JSON.stringify(filterPathById)}
+            class="space-y-3 text-xs tracking-[0.2em] uppercase"
+          >
             <div class="flex flex-wrap items-center gap-2">
               <p class="text-zinc-600">View:</p>
               <div class="inline-flex items-center gap-2">
@@ -387,22 +433,24 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
               <p class="text-zinc-600">Filter:</p>
               <div class="inline-flex flex-wrap items-center gap-2">
                 {
-                  filterOptions.map((option, index) => (
-                    <button
-                      type="button"
+                  filterOptions.map((option) => (
+                    <a
+                      href={option.path}
                       data-filter-button={option.id}
-                      aria-pressed={index === 0 ? "true" : "false"}
+                      aria-current={option.id === initialFilter ? "page" : undefined}
                       class:list={[
                         "rounded-full border px-3 py-1 transition-colors hover:text-zinc-200 focus-visible:outline-none",
-                        index === 0 ? "border-zinc-300 text-zinc-100" : "border-zinc-700 text-zinc-500",
+                        option.id === initialFilter
+                          ? "border-zinc-300 text-zinc-100"
+                          : "border-zinc-700 text-zinc-500",
                       ]}
                     >
                       {option.label} ({option.count})
-                    </button>
+                    </a>
                   ))
                 }
               </div>
-              <p data-tools-count class="ml-1 text-zinc-600">{tools.length} tools</p>
+              <p data-tools-count class="ml-1 text-zinc-600">{initialVisibleCount} tools</p>
             </div>
           </div>
         </div>
@@ -412,7 +460,13 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
         <ul role="list" class="divide-y divide-zinc-800">
           {
             tools.map((tool, index) => (
-              <li data-tool-item data-category={tool.category}>
+              <li
+                data-tool-item
+                data-category={tool.category}
+                class:list={{
+                  hidden: !initialVisibilityByIndex[index],
+                }}
+              >
                 <a
                   href={tool.url}
                   target="_blank"
@@ -421,7 +475,7 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                 >
                   <div class="flex min-w-0 items-center gap-3">
                     <p data-list-number class="w-7 shrink-0 text-xs tabular-nums text-zinc-600">
-                      {String(index + 1).padStart(2, "0")}
+                      {initialListNumbersByIndex[index]}
                     </p>
                     <span class="flex size-10 shrink-0 items-center justify-center border border-zinc-800 bg-zinc-950">
                       <img
@@ -467,7 +521,12 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
               href={tool.url}
               target="_blank"
               rel="noreferrer"
-              class="group flex min-h-64 flex-col justify-between border border-zinc-800 bg-black p-6 transition-colors hover:border-zinc-600"
+              class:list={[
+                "group flex min-h-64 flex-col justify-between border border-zinc-800 bg-black p-6 transition-colors hover:border-zinc-600",
+                {
+                  hidden: !isVisibleForFilter(tool, initialFilter),
+                },
+              ]}
             >
               <div>
                 <div class="mb-6 flex items-center gap-4">
@@ -530,36 +589,60 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
     </div>
 
     <script>
-      const VIEW_STORAGE_KEY = "tools-view"
-      const FILTER_STORAGE_KEY = "tools-filter"
-
       const controlsRoot = document.querySelector("[data-controls-root]")
       const listPanel = document.querySelector('[data-view-panel="list"]')
       const gridPanel = document.querySelector('[data-view-panel="grid"]')
 
       if (controlsRoot && listPanel && gridPanel) {
+        const filterPathById = JSON.parse(controlsRoot.dataset.filterPaths ?? "{}")
+        const initialFilterFromServer = controlsRoot.dataset.initialFilter ?? "all"
         const viewButtons = Array.from(controlsRoot.querySelectorAll("[data-view-button]"))
-        const filterButtons = Array.from(controlsRoot.querySelectorAll("[data-filter-button]"))
+        const filterLinks = Array.from(controlsRoot.querySelectorAll("[data-filter-button]"))
         const listItems = Array.from(listPanel.querySelectorAll("[data-tool-item]"))
         const gridItems = Array.from(gridPanel.querySelectorAll("[data-tool-item]"))
         const countLabel = document.querySelector("[data-tools-count]")
 
-        const applyButtonState = (buttons, activeValue, key) => {
+        const normalizePathname = (pathname) =>
+          pathname !== "/" && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname
+
+        const isKnownFilter = (filter) => Object.prototype.hasOwnProperty.call(filterPathById, filter)
+
+        const getFilterFromPathname = (pathname) => {
+          const normalizedPath = normalizePathname(pathname)
+          for (const [filter, path] of Object.entries(filterPathById)) {
+            if (typeof path === "string" && normalizePathname(path) === normalizedPath) {
+              return filter
+            }
+          }
+          return "all"
+        }
+
+        const applyViewButtonState = (buttons, activeView) => {
           for (const button of buttons) {
-            const isActive = button.dataset[key] === activeValue
+            const isActive = button.dataset.viewButton === activeView
             button.setAttribute("aria-pressed", isActive ? "true" : "false")
 
             button.classList.toggle("text-zinc-100", isActive)
             button.classList.toggle("text-zinc-500", !isActive)
-            button.classList.toggle("border-zinc-300", isActive)
-            button.classList.toggle("border-zinc-700", !isActive)
+            button.classList.toggle("underline", isActive)
+            button.classList.toggle("decoration-zinc-400", isActive)
+            button.classList.toggle("underline-offset-4", isActive)
+            button.classList.toggle("no-underline", !isActive)
+          }
+        }
 
-            if (key === "viewButton") {
-              button.classList.toggle("underline", isActive)
-              button.classList.toggle("decoration-zinc-400", isActive)
-              button.classList.toggle("underline-offset-4", isActive)
-              button.classList.toggle("no-underline", !isActive)
+        const applyFilterLinkState = (links, activeFilter) => {
+          for (const link of links) {
+            const isActive = link.dataset.filterButton === activeFilter
+            if (isActive) {
+              link.setAttribute("aria-current", "page")
+            } else {
+              link.removeAttribute("aria-current")
             }
+            link.classList.toggle("text-zinc-100", isActive)
+            link.classList.toggle("text-zinc-500", !isActive)
+            link.classList.toggle("border-zinc-300", isActive)
+            link.classList.toggle("border-zinc-700", !isActive)
           }
         }
 
@@ -567,7 +650,7 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
           const useGrid = view === "grid"
           listPanel.classList.toggle("hidden", useGrid)
           gridPanel.classList.toggle("hidden", !useGrid)
-          applyButtonState(viewButtons, view, "viewButton")
+          applyViewButtonState(viewButtons, view)
         }
 
         const applyFilter = (filter) => {
@@ -597,18 +680,15 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
             countLabel.textContent = `${visibleCount} tools`
           }
 
-          applyButtonState(filterButtons, filter, "filterButton")
+          applyFilterLinkState(filterLinks, filter)
         }
 
-        const savedView = localStorage.getItem(VIEW_STORAGE_KEY)
-        const savedFilter = localStorage.getItem(FILTER_STORAGE_KEY)
-
-        const initialView = savedView === "grid" ? "grid" : "list"
-        const initialFilter =
-          savedFilter === "environment" ||
-          savedFilter === "cli-tui" ||
-          savedFilter === "agents-sdk"
-            ? savedFilter
+        const initialView = "list"
+        const routeFilter = getFilterFromPathname(window.location.pathname)
+        const initialFilter = isKnownFilter(routeFilter)
+          ? routeFilter
+          : isKnownFilter(initialFilterFromServer)
+            ? initialFilterFromServer
             : "all"
 
         applyFilter(initialFilter)
@@ -618,17 +698,37 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
           button.addEventListener("click", () => {
             const nextView = button.dataset.viewButton === "grid" ? "grid" : "list"
             applyView(nextView)
-            localStorage.setItem(VIEW_STORAGE_KEY, nextView)
           })
         }
 
-        for (const button of filterButtons) {
-          button.addEventListener("click", () => {
-            const nextFilter = button.dataset.filterButton ?? "all"
+        for (const link of filterLinks) {
+          link.addEventListener("click", (event) => {
+            if (event.defaultPrevented) {
+              return
+            }
+            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+              return
+            }
+
+            const nextFilter = link.dataset.filterButton ?? "all"
+            if (!isKnownFilter(nextFilter)) {
+              return
+            }
+
+            const nextPath = typeof filterPathById[nextFilter] === "string" ? filterPathById[nextFilter] : "/"
+            event.preventDefault()
             applyFilter(nextFilter)
-            localStorage.setItem(FILTER_STORAGE_KEY, nextFilter)
+
+            if (normalizePathname(window.location.pathname) !== normalizePathname(nextPath)) {
+              window.history.pushState({ filter: nextFilter }, "", nextPath)
+            }
           })
         }
+
+        window.addEventListener("popstate", () => {
+          const popFilter = getFilterFromPathname(window.location.pathname)
+          applyFilter(isKnownFilter(popFilter) ? popFilter : "all")
+        })
       }
     </script>
   </main>
