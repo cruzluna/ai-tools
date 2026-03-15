@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/main.astro"
 
-type ToolCategory = "environment" | "cli-tui" | "agents-sdk"
+type ToolCategory = "environment" | "sandboxes" | "cli-tui" | "agents-sdk"
 
 type ToolSeed = {
   name: string
@@ -93,6 +93,45 @@ const environmentTools: ToolSeed[] = [
     url: "https://t3.codes",
     domain: "t3.codes",
     description: "A focused AI coding environment positioned as a fast way to ship.",
+  },
+]
+
+const sandboxTools: ToolSeed[] = [
+  {
+    name: "CodeSandbox",
+    url: "https://codesandbox.io/",
+    domain: "codesandbox.io",
+    description: "Cloud development sandboxes for instant, shareable coding environments.",
+  },
+  {
+    name: "Daytona",
+    url: "https://www.daytona.io/",
+    domain: "daytona.io",
+    description: "Platform for creating secure, reproducible development sandboxes.",
+  },
+  {
+    name: "E2B",
+    url: "https://e2b.dev/",
+    domain: "e2b.dev",
+    description: "Open-source cloud runtime for executing AI-generated code in sandboxes.",
+  },
+  {
+    name: "Modal",
+    url: "https://modal.com/products/sandboxes",
+    domain: "modal.com",
+    description: "Ephemeral Python sandboxes for code execution and interactive workloads.",
+  },
+  {
+    name: "Northflank",
+    url: "https://northflank.com/product/sandboxes",
+    domain: "northflank.com",
+    description: "Managed container sandboxes for isolated development and runtime tasks.",
+  },
+  {
+    name: "Vercel Sandbox",
+    url: "https://vercel.com/sandbox",
+    domain: "vercel.com",
+    description: "Instant cloud sandboxes for previewing and testing web projects.",
   },
 ]
 
@@ -251,12 +290,14 @@ const withCategory = (category: ToolCategory, toolList: ToolSeed[]): Tool[] =>
 
 const tools: Tool[] = [
   ...withCategory("environment", environmentTools),
+  ...withCategory("sandboxes", sandboxTools),
   ...withCategory("cli-tui", cliTuiTools),
   ...withCategory("agents-sdk", agentsSdkTools),
 ].sort((a, b) => a.name.localeCompare(b.name))
 
 const categoryLabels: Record<ToolCategory, string> = {
   environment: "ADE",
+  sandboxes: "Sandboxes",
   "cli-tui": "CLI/TUI",
   "agents-sdk": "Agents SDK",
 }
@@ -267,6 +308,11 @@ const filterOptions = [
     id: "environment",
     label: "ADE",
     count: tools.filter((tool) => tool.category === "environment").length,
+  },
+  {
+    id: "sandboxes",
+    label: "Sandboxes",
+    count: tools.filter((tool) => tool.category === "sandboxes").length,
   },
   {
     id: "cli-tui",
