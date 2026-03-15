@@ -1,0 +1,11 @@
+---
+import IndexPage from "@/pages/index.astro"
+
+export function getStaticPaths() {
+  return ["environment", "sandboxes", "cli-tui", "agents-sdk"].map((filter) => ({
+    params: { filter },
+  }))
+}
+---
+
+<IndexPage />
