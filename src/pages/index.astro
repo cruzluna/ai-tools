@@ -1,7 +1,12 @@
 ---
 import Layout from "@/layouts/main.astro"
 
-type ToolCategory = "environment" | "sandboxes" | "cli-tui" | "agents-sdk" | "autonomous-agents"
+type ToolCategory =
+  | "environment"
+  | "sandboxes"
+  | "cli-tui"
+  | "agents-sdk"
+  | "autonomous-agents"
 type FilterId = ToolCategory | "all"
 
 type ToolSeed = {
@@ -16,7 +21,8 @@ type Tool = ToolSeed & {
   category: ToolCategory
 }
 
-const formatLanguages = (languages?: string[]) => (languages ? languages.join(", ") : "")
+const formatLanguages = (languages?: string[]) =>
+  languages ? languages.join(", ") : ""
 
 const environmentTools: ToolSeed[] = [
   {
@@ -93,7 +99,8 @@ const environmentTools: ToolSeed[] = [
     name: "vibe-kanban",
     url: "https://github.com/BloopAI/vibe-kanban",
     domain: "github.com",
-    description: "Kanban board for planning and tracking vibe-coding tasks with AI agents.",
+    description:
+      "Kanban board for planning and tracking vibe-coding tasks with AI agents.",
   },
   {
     name: "dmux",
@@ -134,7 +141,8 @@ const environmentTools: ToolSeed[] = [
     name: "T3 Code",
     url: "https://t3.codes",
     domain: "t3.codes",
-    description: "A focused AI coding environment positioned as a fast way to ship.",
+    description:
+      "A focused AI coding environment positioned as a fast way to ship.",
   },
   {
     name: "DPCode",
@@ -147,7 +155,8 @@ const environmentTools: ToolSeed[] = [
     name: "Acepe",
     url: "https://acepe.dev/",
     domain: "acepe.dev",
-    description: "Agent development environment for building with parallel AI coding workflows.",
+    description:
+      "Agent development environment for building with parallel AI coding workflows.",
   },
 ]
 
@@ -156,49 +165,57 @@ const sandboxTools: ToolSeed[] = [
     name: "CodeSandbox",
     url: "https://codesandbox.io/",
     domain: "codesandbox.io",
-    description: "Cloud development sandboxes for instant, shareable coding environments.",
+    description:
+      "Cloud development sandboxes for instant, shareable coding environments.",
   },
   {
     name: "Daytona",
     url: "https://www.daytona.io/",
     domain: "daytona.io",
-    description: "Platform for creating secure, reproducible development sandboxes.",
+    description:
+      "Platform for creating secure, reproducible development sandboxes.",
   },
   {
     name: "E2B",
     url: "https://e2b.dev/",
     domain: "e2b.dev",
-    description: "Open-source cloud runtime for executing AI-generated code in sandboxes.",
+    description:
+      "Open-source cloud runtime for executing AI-generated code in sandboxes.",
   },
   {
     name: "LangSmith Sandboxes",
     url: "https://blog.langchain.com/introducing-langsmith-sandboxes-secure-code-execution-for-agents/",
     domain: "langchain.com",
-    description: "Secure code execution sandboxes for agent evaluations and testing workflows.",
+    description:
+      "Secure code execution sandboxes for agent evaluations and testing workflows.",
   },
   {
     name: "Modal",
     url: "https://modal.com/products/sandboxes",
     domain: "modal.com",
-    description: "Ephemeral Python sandboxes for code execution and interactive workloads.",
+    description:
+      "Ephemeral Python sandboxes for code execution and interactive workloads.",
   },
   {
     name: "Northflank",
     url: "https://northflank.com/product/sandboxes",
     domain: "northflank.com",
-    description: "Managed container sandboxes for isolated development and runtime tasks.",
+    description:
+      "Managed container sandboxes for isolated development and runtime tasks.",
   },
   {
     name: "Runloop",
     url: "https://runloop.ai",
     domain: "runloop.ai",
-    description: "Cloud sandboxes for running and managing agent-generated code securely.",
+    description:
+      "Cloud sandboxes for running and managing agent-generated code securely.",
   },
   {
     name: "Vercel Sandbox",
     url: "https://vercel.com/sandbox",
     domain: "vercel.com",
-    description: "Instant cloud sandboxes for previewing and testing web projects.",
+    description:
+      "Instant cloud sandboxes for previewing and testing web projects.",
   },
 ]
 
@@ -207,61 +224,71 @@ const cliTuiTools: ToolSeed[] = [
     name: "Aider",
     url: "https://aider.chat/",
     domain: "aider.chat",
-    description: "Open source AI pair programmer that edits code directly in your repo.",
+    description:
+      "Open source AI pair programmer that edits code directly in your repo.",
   },
   {
     name: "Amp",
     url: "https://ampcode.com/",
     domain: "ampcode.com",
-    description: "Terminal-first AI coding assistant for running agentic development workflows.",
+    description:
+      "Terminal-first AI coding assistant for running agentic development workflows.",
   },
   {
     name: "Claude Code",
     url: "https://code.claude.com/docs/en/overview",
     domain: "claude.com",
-    description: "Anthropic's terminal coding agent for codebase-aware edits and execution.",
+    description:
+      "Anthropic's terminal coding agent for codebase-aware edits and execution.",
   },
   {
     name: "Cline CLI",
     url: "https://cline.bot/cli",
     domain: "cline.bot",
-    description: "Command-line interface for running Cline's coding agent from your terminal.",
+    description:
+      "Command-line interface for running Cline's coding agent from your terminal.",
   },
   {
     name: "Codex CLI",
     url: "https://developers.openai.com/codex/cli/",
     domain: "openai.com",
-    description: "OpenAI's command-line coding agent for terminal-native software tasks.",
+    description:
+      "OpenAI's command-line coding agent for terminal-native software tasks.",
   },
   {
     name: "Copilot CLI",
     url: "https://github.com/features/copilot/cli",
     domain: "github.com",
-    description: "GitHub Copilot in the terminal for generating and explaining shell commands.",
+    description:
+      "GitHub Copilot in the terminal for generating and explaining shell commands.",
   },
   {
     name: "Cursor CLI",
     url: "https://cursor.com/cli",
     domain: "cursor.com",
-    description: "Cursor's CLI for running coding and agent workflows outside the editor.",
+    description:
+      "Cursor's CLI for running coding and agent workflows outside the editor.",
   },
   {
     name: "Kiro CLI",
     url: "https://kiro.dev/cli/",
     domain: "kiro.dev",
-    description: "Kiro command-line tooling for building and shipping with AI coding agents.",
+    description:
+      "Kiro command-line tooling for building and shipping with AI coding agents.",
   },
   {
     name: "OpenCode CLI",
     url: "https://opencode.ai/docs/cli/",
     domain: "opencode.ai",
-    description: "OpenCode's CLI for running coding sessions from the terminal.",
+    description:
+      "OpenCode's CLI for running coding sessions from the terminal.",
   },
   {
     name: "Pi Agent",
     url: "https://shittycodingagent.ai/",
     domain: "shittycodingagent.ai",
-    description: "Terminal-native AI coding agent for command-line development workflows.",
+    description:
+      "Terminal-native AI coding agent for command-line development workflows.",
   },
 ]
 
@@ -270,7 +297,8 @@ const agentsSdkTools: ToolSeed[] = [
     name: "AI SDK (Vercel)",
     url: "https://ai-sdk.dev/docs/introduction",
     domain: "ai-sdk.dev",
-    description: "Type-safe toolkit for building AI chat apps and agent workflows.",
+    description:
+      "Type-safe toolkit for building AI chat apps and agent workflows.",
     languages: ["TypeScript", "JavaScript"],
   },
   {
@@ -284,35 +312,40 @@ const agentsSdkTools: ToolSeed[] = [
     name: "OpenAI App Server",
     url: "https://developers.openai.com/codex/app-server/",
     domain: "openai.com",
-    description: "Codex app server for harnessing coding-agent threads via JSON-RPC.",
+    description:
+      "Codex app server for harnessing coding-agent threads via JSON-RPC.",
     languages: ["Language-agnostic protocol", "TypeScript (official SDK)"],
   },
   {
     name: "Kimi Agent SDK",
     url: "https://github.com/MoonshotAI/kimi-agent-sdk",
     domain: "github.com",
-    description: "Programmatic SDK for integrating Moonshot's Kimi agent runtime.",
+    description:
+      "Programmatic SDK for integrating Moonshot's Kimi agent runtime.",
     languages: ["Python", "TypeScript/Node.js", "Go"],
   },
   {
     name: "CrewAI",
     url: "https://crewai.com/",
     domain: "crewai.com",
-    description: "Framework for orchestrating role-based multi-agent workflows.",
+    description:
+      "Framework for orchestrating role-based multi-agent workflows.",
     languages: ["Python"],
   },
   {
     name: "Strands Agents",
     url: "https://strandsagents.com/",
     domain: "strandsagents.com",
-    description: "Model-driven SDK for composing tools, memory, and agent loops.",
+    description:
+      "Model-driven SDK for composing tools, memory, and agent loops.",
     languages: ["Python", "TypeScript"],
   },
   {
     name: "Pi (SDK)",
     url: "https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent#programmatic-usage",
     domain: "github.com",
-    description: "Programmatic interface for embedding the Pi coding agent in apps.",
+    description:
+      "Programmatic interface for embedding the Pi coding agent in apps.",
     languages: ["TypeScript", "JavaScript"],
   },
   {
@@ -326,28 +359,32 @@ const agentsSdkTools: ToolSeed[] = [
     name: "Qwen-Agent",
     url: "https://qwenlm.github.io/Qwen-Agent/",
     domain: "qwenlm.github.io",
-    description: "Framework for tool use, planning, and memory with Qwen models.",
+    description:
+      "Framework for tool use, planning, and memory with Qwen models.",
     languages: ["Python"],
   },
   {
     name: "LangGraph",
     url: "https://www.langchain.com/langgraph",
     domain: "langchain.com",
-    description: "Stateful graph framework for durable, multi-step agent workflows.",
+    description:
+      "Stateful graph framework for durable, multi-step agent workflows.",
     languages: ["Python", "TypeScript"],
   },
   {
     name: "PydanticAI",
     url: "https://ai.pydantic.dev/",
     domain: "ai.pydantic.dev",
-    description: "Type-safe agent framework built around Pydantic models and validation.",
+    description:
+      "Type-safe agent framework built around Pydantic models and validation.",
     languages: ["Python"],
   },
   {
     name: "OpenAI Agents SDK",
     url: "https://developers.openai.com/api/docs/guides/agents-sdk/",
     domain: "openai.com",
-    description: "OpenAI's agent orchestration SDK with tools, handoffs, and guardrails.",
+    description:
+      "OpenAI's agent orchestration SDK with tools, handoffs, and guardrails.",
     languages: ["Python", "TypeScript"],
   },
 ]
@@ -428,7 +465,9 @@ const isVisibleForFilter = (tool: Tool, filter: FilterId) =>
   filter === "all" || tool.category === filter
 
 const initialFilter = getFilterFromPathname(Astro.url.pathname)
-const initialVisibilityByIndex = tools.map((tool) => isVisibleForFilter(tool, initialFilter))
+const initialVisibilityByIndex = tools.map((tool) =>
+  isVisibleForFilter(tool, initialFilter)
+)
 let initialListNumber = 0
 const initialListNumbersByIndex = initialVisibilityByIndex.map((isVisible) => {
   if (!isVisible) {
@@ -437,7 +476,9 @@ const initialListNumbersByIndex = initialVisibilityByIndex.map((isVisible) => {
   initialListNumber += 1
   return String(initialListNumber).padStart(2, "0")
 })
-const initialVisibleCount = tools.filter((tool) => isVisibleForFilter(tool, initialFilter)).length
+const initialVisibleCount = tools.filter((tool) =>
+  isVisibleForFilter(tool, initialFilter)
+).length
 
 const filterOptions = [
   { id: "all", label: "All", path: filterPathById.all, count: tools.length },
@@ -489,129 +530,195 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
 ---
 
 <Layout title="AI Agent Environments">
-  <main class="min-h-svh w-full bg-black text-white">
-    <div class="mx-auto w-full max-w-6xl px-6 py-10 sm:px-10 sm:py-14">
-      <header class="mb-8 border-b border-zinc-900 pb-6">
-        <div class="space-y-4">
-          <div class="space-y-2">
-            <p class="text-xs tracking-[0.2em] text-zinc-500 uppercase">Featured Tools</p>
-            <h1 class="text-3xl font-medium tracking-tight sm:text-4xl">Agent Development Environments</h1>
-            <p class="max-w-2xl text-base text-zinc-400">Brief picks for building with AI agents.</p>
+  <main
+    id="main-content"
+    class="min-h-svh w-full bg-black text-white"
+    tabindex="-1"
+  >
+    <div
+      class="mx-auto grid w-full max-w-7xl gap-6 px-4 py-6 sm:gap-8 sm:px-8 sm:py-10 lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-14 lg:px-10 lg:py-16"
+    >
+      <header class="min-w-0 lg:sticky lg:top-10 lg:self-start">
+        <div class="lg:pb-0">
+          <div class="mb-5 space-y-4 border-b border-zinc-900 pb-5 sm:mb-6 sm:space-y-5 lg:mb-10 lg:space-y-6 lg:border-b-0 lg:pb-0">
+            <div class="space-y-3 lg:space-y-4">
+              <div class="flex items-start justify-between gap-4">
+                <p class="text-[0.65rem] tracking-[0.28em] text-zinc-500 uppercase">
+                  Featured Tools
+                </p>
+                <p class="shrink-0 text-right text-[0.65rem] leading-snug text-zinc-500">
+                  <span class="tracking-wide">Site</span>
+                  <span class="mx-1 text-zinc-700" aria-hidden="true">
+                    ·
+                  </span>
+                  <a
+                    href="https://www.cruzluna.dev/"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="border-b border-zinc-600 text-zinc-300 transition-colors hover:border-zinc-400 hover:text-zinc-100 focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none"
+                  >
+                    cruzluna.dev
+                  </a>
+                </p>
+              </div>
+              <h1
+                class="max-w-[22rem] text-balance text-3xl leading-[1.08] font-medium tracking-[-0.035em] text-zinc-50 sm:max-w-3xl sm:text-4xl sm:leading-[1.05] lg:max-w-none lg:text-[3.25rem] lg:leading-none"
+              >
+                Agent Development Environments
+              </h1>
+              <p class="max-w-md text-sm leading-relaxed text-zinc-400 sm:max-w-xl sm:text-[0.9375rem] sm:leading-7">
+                A compact index of tools for building, running, and shipping
+                with AI agents.
+              </p>
+            </div>
+
+            <div
+              class="flex items-baseline gap-2 border-y border-zinc-800 py-3 text-xs text-zinc-500 lg:py-3.5"
+            >
+              <p class="shrink-0 tracking-[0.18em] uppercase">Listed</p>
+              <p
+                data-tools-count
+                class="min-w-0 truncate text-base leading-none font-medium tracking-tight text-zinc-100 tabular-nums"
+              >
+                {initialVisibleCount} tools
+              </p>
+            </div>
           </div>
 
           <div
             data-controls-root
             data-initial-filter={initialFilter}
             data-filter-paths={JSON.stringify(filterPathById)}
-            class="space-y-3 text-xs tracking-[0.2em] uppercase"
+            class="sticky top-0 z-30 -mx-4 border-b border-zinc-900 bg-black px-4 py-2.5 sm:-mx-8 sm:px-8 lg:static lg:z-auto lg:mx-0 lg:border-0 lg:bg-transparent lg:px-0 lg:py-0"
           >
-            <div class="flex flex-wrap items-center gap-2">
-              <p class="text-zinc-600">Filter:</p>
-              <div class="inline-flex flex-wrap items-center gap-2">
-                {
-                  filterOptions.map((option) => (
-                    <a
-                      href={option.path}
-                      data-filter-button={option.id}
-                      aria-current={option.id === initialFilter ? "page" : undefined}
-                      class:list={[
-                        "rounded-full border px-3 py-1 transition-colors hover:text-zinc-200 focus-visible:outline-none",
-                        option.id === initialFilter
-                          ? "border-zinc-300 text-zinc-100"
-                          : "border-zinc-700 text-zinc-500",
-                      ]}
-                    >
-                      {option.label} ({option.count})
-                    </a>
-                  ))
-                }
-              </div>
-              <p data-tools-count class="ml-1 text-zinc-600">{initialVisibleCount} tools</p>
-            </div>
+            <p class="mb-2 hidden tracking-[0.2em] text-zinc-600 uppercase lg:block">
+              Filter
+            </p>
+            <nav
+              aria-label="Tool filters"
+              class="flex touch-pan-x snap-x snap-proximity gap-2 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] lg:grid lg:snap-none lg:grid-cols-1 lg:gap-1.5 lg:overflow-visible [&::-webkit-scrollbar]:hidden"
+            >
+              {
+                filterOptions.map((option) => (
+                  <a
+                    href={option.path}
+                    data-filter-button={option.id}
+                    aria-current={
+                      option.id === initialFilter ? "page" : undefined
+                    }
+                    class:list={[
+                      "flex max-lg:snap-start max-lg:shrink-0 max-lg:whitespace-nowrap items-center gap-2 border px-3 py-2 text-[0.65rem] tracking-wide uppercase transition-colors hover:border-zinc-500 hover:text-zinc-100 focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none max-lg:focus-visible:ring-offset-0 lg:w-full lg:justify-between lg:gap-0 lg:py-2.5 lg:text-xs",
+                      option.id === initialFilter
+                        ? "border-zinc-300 text-zinc-100"
+                        : "border-zinc-800 text-zinc-500",
+                    ]}
+                  >
+                    <span>{option.label}</span>
+                    <span class="tabular-nums">
+                      {String(option.count).padStart(2, "0")}
+                    </span>
+                  </a>
+                ))
+              }
+            </nav>
           </div>
         </div>
       </header>
 
-      <section data-view-panel="list" aria-label="Tools list view" class="border border-zinc-800">
-        <ul role="list" class="divide-y divide-zinc-800">
-          {
-            tools.map((tool, index) => (
-              <li
-                data-tool-item
-                data-category={tool.category}
-                class:list={{
-                  hidden: !initialVisibilityByIndex[index],
-                }}
-              >
-                <a
-                  href={tool.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  class="group flex flex-col gap-3 px-4 py-5 transition-colors hover:bg-zinc-950 sm:flex-row sm:items-start sm:justify-between sm:gap-6 sm:px-6"
+      <div class="min-w-0">
+        <section
+          data-view-panel="list"
+          aria-label="Tools list view"
+          class="border border-zinc-800 bg-zinc-950/30"
+        >
+          <div
+            class="hidden grid-cols-[4.5rem_minmax(12rem,1fr)_minmax(18rem,2fr)_10rem] border-b border-zinc-800 px-5 py-3 text-xs tracking-[0.18em] text-zinc-500 uppercase md:grid"
+          >
+            <p>No.</p>
+            <p>Tool</p>
+            <p>Use</p>
+            <p class="text-right">Type</p>
+          </div>
+
+          <ul role="list" class="divide-y divide-zinc-800">
+            {
+              tools.map((tool, index) => (
+                <li
+                  data-tool-item
+                  data-category={tool.category}
+                  class:list={{
+                    hidden: !initialVisibilityByIndex[index],
+                  }}
                 >
-                  <div class="flex min-w-0 flex-1 items-center gap-3">
-                    <p data-list-number class="w-7 shrink-0 pt-0.5 text-xs tabular-nums text-zinc-600">
+                  <a
+                    href={tool.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    class="group grid gap-3 px-4 py-4 transition-[background-color,box-shadow] duration-150 hover:bg-black focus-visible:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-inset sm:gap-4 sm:px-5 sm:py-5 md:grid-cols-[4.5rem_minmax(12rem,1fr)_minmax(18rem,2fr)_10rem] md:items-start"
+                  >
+                    <p
+                      data-list-number
+                      class="text-xs text-zinc-600 tabular-nums md:pt-3"
+                    >
                       {initialListNumbersByIndex[index]}
                     </p>
-                    <span class="flex size-10 shrink-0 items-center justify-center border border-zinc-800 bg-zinc-950">
-                      <img
-                        src={`https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128`}
-                        alt={`${tool.name} logo`}
-                        loading="lazy"
-                        class="size-6 grayscale"
-                      />
-                    </span>
-                    <div class="min-w-0 flex-1">
-                      <p class="truncate text-base tracking-tight">{tool.name}</p>
-                      <p class="truncate text-xs text-zinc-500">{tool.url.replace("https://", "")}</p>
-                    </div>
-                  </div>
 
-                  <div class="space-y-1 text-left sm:max-w-2xl sm:flex-1">
-                    <p class="text-sm leading-relaxed text-zinc-400">{tool.description}</p>
-                    {
-                      tool.languages && (
+                    <div class="flex min-w-0 items-center gap-3">
+                      <span class="flex size-11 shrink-0 items-center justify-center border border-zinc-800 bg-zinc-950 transition-[border-color] duration-150 group-hover:border-zinc-600">
+                        <img
+                          src={`https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128`}
+                          alt={`${tool.name} logo`}
+                          loading="lazy"
+                          class="size-6 grayscale"
+                        />
+                      </span>
+                      <div class="min-w-0">
+                        <p class="truncate text-base font-medium tracking-tight text-zinc-50">
+                          {tool.name}
+                        </p>
+                        <p class="truncate text-xs text-zinc-500">
+                          {tool.url.replace("https://", "")}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="space-y-1.5 md:space-y-2 md:pt-1.5">
+                      <p class="text-sm leading-snug text-zinc-400 sm:leading-6">
+                        {tool.description}
+                      </p>
+                      {tool.languages && (
                         <p class="text-xs leading-relaxed text-zinc-500">
                           Languages: {formatLanguages(tool.languages)}
                         </p>
-                      )
-                    }
-                  </div>
+                      )}
+                    </div>
 
-                  <p class="text-xs tracking-[0.2em] text-zinc-600 uppercase sm:w-32 sm:pt-0.5 sm:text-right">
-                    {categoryLabels[tool.category] ?? tool.category}
-                  </p>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
+                    <p class="text-xs tracking-[0.18em] text-zinc-500 uppercase md:pt-3 md:text-right">
+                      {categoryLabels[tool.category] ?? tool.category}
+                    </p>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
 
-      <footer class="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-zinc-900 pt-6">
-        <p class="text-xs text-zinc-600">
-          site by:
+        <footer
+          class="mt-10 flex flex-wrap items-center justify-end gap-4 border-t border-zinc-900 pt-8"
+        >
           <a
-            href="https://www.cruzluna.dev/"
+            href={newIssueUrl}
             target="_blank"
             rel="noreferrer"
-            class="ml-1 text-zinc-400 underline underline-offset-4 hover:text-zinc-200"
+            aria-label="Missing? Opens GitHub in a new tab"
+            title="Opens GitHub in a new tab"
+            class="inline-flex items-center gap-1.5 border border-zinc-700 px-4 py-2 text-sm text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100 focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none"
           >
-            cruzluna.dev
+            <span>Missing?</span>
+            <span aria-hidden="true">↗</span>
           </a>
-        </p>
-        <a
-          href={newIssueUrl}
-          target="_blank"
-          rel="noreferrer"
-          aria-label="Missing? Opens GitHub in a new tab"
-          title="Opens GitHub in a new tab"
-          class="inline-flex items-center gap-1 border border-zinc-700 px-4 py-2 text-sm text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100 focus-visible:outline-none"
-        >
-          <span>Missing?</span>
-          <span aria-hidden="true">↗</span>
-        </a>
-      </footer>
+        </footer>
+      </div>
     </div>
 
     <script>
@@ -619,21 +726,34 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
       const listPanel = document.querySelector('[data-view-panel="list"]')
 
       if (controlsRoot && listPanel) {
-        const filterPathById = JSON.parse(controlsRoot.dataset.filterPaths ?? "{}")
-        const initialFilterFromServer = controlsRoot.dataset.initialFilter ?? "all"
-        const filterLinks = Array.from(controlsRoot.querySelectorAll("[data-filter-button]"))
-        const listItems = Array.from(listPanel.querySelectorAll("[data-tool-item]"))
-        const countLabel = document.querySelector("[data-tools-count]")
+        const filterPathById = JSON.parse(
+          controlsRoot.dataset.filterPaths ?? "{}"
+        )
+        const initialFilterFromServer =
+          controlsRoot.dataset.initialFilter ?? "all"
+        const filterLinks = Array.from(
+          controlsRoot.querySelectorAll("[data-filter-button]")
+        )
+        const listItems = Array.from(
+          listPanel.querySelectorAll("[data-tool-item]")
+        )
+        const countLabels = document.querySelectorAll("[data-tools-count]")
 
         const normalizePathname = (pathname) =>
-          pathname !== "/" && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname
+          pathname !== "/" && pathname.endsWith("/")
+            ? pathname.slice(0, -1)
+            : pathname
 
-        const isKnownFilter = (filter) => Object.prototype.hasOwnProperty.call(filterPathById, filter)
+        const isKnownFilter = (filter) =>
+          Object.prototype.hasOwnProperty.call(filterPathById, filter)
 
         const getFilterFromPathname = (pathname) => {
           const normalizedPath = normalizePathname(pathname)
           for (const [filter, path] of Object.entries(filterPathById)) {
-            if (typeof path === "string" && normalizePathname(path) === normalizedPath) {
+            if (
+              typeof path === "string" &&
+              normalizePathname(path) === normalizedPath
+            ) {
               return filter
             }
           }
@@ -651,7 +771,7 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
             link.classList.toggle("text-zinc-100", isActive)
             link.classList.toggle("text-zinc-500", !isActive)
             link.classList.toggle("border-zinc-300", isActive)
-            link.classList.toggle("border-zinc-700", !isActive)
+            link.classList.toggle("border-zinc-800", !isActive)
           }
         }
 
@@ -660,7 +780,8 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
           let visibleIndex = 1
 
           for (const item of listItems) {
-            const isVisible = filter === "all" || item.dataset.category === filter
+            const isVisible =
+              filter === "all" || item.dataset.category === filter
             item.classList.toggle("hidden", !isVisible)
 
             if (isVisible) {
@@ -673,8 +794,8 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
             }
           }
 
-          if (countLabel) {
-            countLabel.textContent = `${visibleCount} tools`
+          for (const label of countLabels) {
+            label.textContent = `${visibleCount} tools`
           }
 
           applyFilterLinkState(filterLinks, filter)
@@ -694,7 +815,13 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
             if (event.defaultPrevented) {
               return
             }
-            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+            if (
+              event.button !== 0 ||
+              event.metaKey ||
+              event.ctrlKey ||
+              event.shiftKey ||
+              event.altKey
+            ) {
               return
             }
 
@@ -703,11 +830,17 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
               return
             }
 
-            const nextPath = typeof filterPathById[nextFilter] === "string" ? filterPathById[nextFilter] : "/"
+            const nextPath =
+              typeof filterPathById[nextFilter] === "string"
+                ? filterPathById[nextFilter]
+                : "/"
             event.preventDefault()
             applyFilter(nextFilter)
 
-            if (normalizePathname(window.location.pathname) !== normalizePathname(nextPath)) {
+            if (
+              normalizePathname(window.location.pathname) !==
+              normalizePathname(nextPath)
+            ) {
               window.history.pushState({ filter: nextFilter }, "", nextPath)
             }
           })

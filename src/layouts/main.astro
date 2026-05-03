@@ -46,6 +46,12 @@ const imageAlt = ogImageAlt ?? title
     <meta name="twitter:image:alt" content={imageAlt} />
   </head>
   <body class="overflow-x-hidden bg-black text-white">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:border focus:border-zinc-400 focus:bg-black focus:px-4 focus:py-2 focus:text-sm focus:text-zinc-100"
+    >
+      Skip to content
+    </a>
     <slot />
   </body>
 </html>
