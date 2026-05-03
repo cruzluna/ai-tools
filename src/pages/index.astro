@@ -506,29 +506,6 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
             class="space-y-3 text-xs tracking-[0.2em] uppercase"
           >
             <div class="flex flex-wrap items-center gap-2">
-              <p class="text-zinc-600">View:</p>
-              <div class="inline-flex items-center gap-2">
-                <button
-                  type="button"
-                  data-view-button="list"
-                  aria-pressed="true"
-                  class="text-zinc-100 underline decoration-zinc-400 underline-offset-4 transition-colors hover:text-zinc-200 focus-visible:outline-none"
-                >
-                  List
-                </button>
-                <span aria-hidden="true" class="text-zinc-700">/</span>
-                <button
-                  type="button"
-                  data-view-button="grid"
-                  aria-pressed="false"
-                  class="text-zinc-500 no-underline transition-colors hover:text-zinc-200 focus-visible:outline-none"
-                >
-                  Grid
-                </button>
-              </div>
-            </div>
-
-            <div class="flex flex-wrap items-center gap-2">
               <p class="text-zinc-600">Filter:</p>
               <div class="inline-flex flex-wrap items-center gap-2">
                 {
@@ -570,10 +547,10 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                   href={tool.url}
                   target="_blank"
                   rel="noreferrer"
-                  class="group flex flex-col gap-4 px-4 py-5 transition-colors hover:bg-zinc-950 sm:grid sm:grid-cols-[minmax(0,1.4fr)_minmax(0,2fr)_9rem] sm:items-start sm:gap-6 sm:px-6"
+                  class="group flex flex-col gap-3 px-4 py-5 transition-colors hover:bg-zinc-950 sm:flex-row sm:items-start sm:justify-between sm:gap-6 sm:px-6"
                 >
-                  <div class="flex min-w-0 items-center gap-3">
-                    <p data-list-number class="w-7 shrink-0 text-xs tabular-nums text-zinc-600">
+                  <div class="flex min-w-0 flex-1 items-center gap-3">
+                    <p data-list-number class="w-7 shrink-0 pt-0.5 text-xs tabular-nums text-zinc-600">
                       {initialListNumbersByIndex[index]}
                     </p>
                     <span class="flex size-10 shrink-0 items-center justify-center border border-zinc-800 bg-zinc-950">
@@ -584,13 +561,13 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                         class="size-6 grayscale"
                       />
                     </span>
-                    <div class="min-w-0">
+                    <div class="min-w-0 flex-1">
                       <p class="truncate text-base tracking-tight">{tool.name}</p>
                       <p class="truncate text-xs text-zinc-500">{tool.url.replace("https://", "")}</p>
                     </div>
                   </div>
 
-                  <div class="space-y-1 text-left">
+                  <div class="space-y-1 text-left sm:max-w-2xl sm:flex-1">
                     <p class="text-sm leading-relaxed text-zinc-400">{tool.description}</p>
                     {
                       tool.languages && (
@@ -601,7 +578,7 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                     }
                   </div>
 
-                  <p class="text-xs tracking-[0.2em] text-zinc-600 uppercase">
+                  <p class="text-xs tracking-[0.2em] text-zinc-600 uppercase sm:w-32 sm:pt-0.5 sm:text-right">
                     {categoryLabels[tool.category] ?? tool.category}
                   </p>
                 </a>
@@ -609,56 +586,6 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
             ))
           }
         </ul>
-      </section>
-
-      <section data-view-panel="grid" aria-label="Tools grid view" class="hidden grid gap-4 sm:grid-cols-2">
-        {
-          tools.map((tool) => (
-            <a
-              data-tool-item
-              data-category={tool.category}
-              href={tool.url}
-              target="_blank"
-              rel="noreferrer"
-              class:list={[
-                "group flex min-h-64 flex-col justify-between border border-zinc-800 bg-black p-6 transition-colors hover:border-zinc-600",
-                {
-                  hidden: !isVisibleForFilter(tool, initialFilter),
-                },
-              ]}
-            >
-              <div>
-                <div class="mb-6 flex items-center gap-4">
-                  <span class="flex size-12 shrink-0 items-center justify-center border border-zinc-800 bg-zinc-950">
-                    <img
-                      src={`https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128`}
-                      alt={`${tool.name} logo`}
-                      loading="lazy"
-                      class="size-7 grayscale"
-                    />
-                  </span>
-                  <div class="min-w-0">
-                    <p class="truncate text-sm text-zinc-500">{tool.url.replace("https://", "")}</p>
-                    <p class="text-2xl leading-tight tracking-tight">{tool.name}</p>
-                    <p class="mt-1 text-xs tracking-[0.2em] text-zinc-600 uppercase">
-                      {categoryLabels[tool.category] ?? tool.category}
-                    </p>
-                  </div>
-                </div>
-                <div class="space-y-2 text-left">
-                  <p class="text-lg leading-relaxed text-zinc-400">{tool.description}</p>
-                  {
-                    tool.languages && (
-                      <p class="text-sm leading-relaxed text-zinc-500">
-                        Languages: {formatLanguages(tool.languages)}
-                      </p>
-                    )
-                  }
-                </div>
-              </div>
-            </a>
-          ))
-        }
       </section>
 
       <footer class="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-zinc-900 pt-6">
@@ -690,15 +617,12 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
     <script>
       const controlsRoot = document.querySelector("[data-controls-root]")
       const listPanel = document.querySelector('[data-view-panel="list"]')
-      const gridPanel = document.querySelector('[data-view-panel="grid"]')
 
-      if (controlsRoot && listPanel && gridPanel) {
+      if (controlsRoot && listPanel) {
         const filterPathById = JSON.parse(controlsRoot.dataset.filterPaths ?? "{}")
         const initialFilterFromServer = controlsRoot.dataset.initialFilter ?? "all"
-        const viewButtons = Array.from(controlsRoot.querySelectorAll("[data-view-button]"))
         const filterLinks = Array.from(controlsRoot.querySelectorAll("[data-filter-button]"))
         const listItems = Array.from(listPanel.querySelectorAll("[data-tool-item]"))
-        const gridItems = Array.from(gridPanel.querySelectorAll("[data-tool-item]"))
         const countLabel = document.querySelector("[data-tools-count]")
 
         const normalizePathname = (pathname) =>
@@ -716,20 +640,6 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
           return "all"
         }
 
-        const applyViewButtonState = (buttons, activeView) => {
-          for (const button of buttons) {
-            const isActive = button.dataset.viewButton === activeView
-            button.setAttribute("aria-pressed", isActive ? "true" : "false")
-
-            button.classList.toggle("text-zinc-100", isActive)
-            button.classList.toggle("text-zinc-500", !isActive)
-            button.classList.toggle("underline", isActive)
-            button.classList.toggle("decoration-zinc-400", isActive)
-            button.classList.toggle("underline-offset-4", isActive)
-            button.classList.toggle("no-underline", !isActive)
-          }
-        }
-
         const applyFilterLinkState = (links, activeFilter) => {
           for (const link of links) {
             const isActive = link.dataset.filterButton === activeFilter
@@ -743,13 +653,6 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
             link.classList.toggle("border-zinc-300", isActive)
             link.classList.toggle("border-zinc-700", !isActive)
           }
-        }
-
-        const applyView = (view) => {
-          const useGrid = view === "grid"
-          listPanel.classList.toggle("hidden", useGrid)
-          gridPanel.classList.toggle("hidden", !useGrid)
-          applyViewButtonState(viewButtons, view)
         }
 
         const applyFilter = (filter) => {
@@ -770,11 +673,6 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
             }
           }
 
-          for (const item of gridItems) {
-            const isVisible = filter === "all" || item.dataset.category === filter
-            item.classList.toggle("hidden", !isVisible)
-          }
-
           if (countLabel) {
             countLabel.textContent = `${visibleCount} tools`
           }
@@ -782,7 +680,6 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
           applyFilterLinkState(filterLinks, filter)
         }
 
-        const initialView = "list"
         const routeFilter = getFilterFromPathname(window.location.pathname)
         const initialFilter = isKnownFilter(routeFilter)
           ? routeFilter
@@ -791,14 +688,6 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
             : "all"
 
         applyFilter(initialFilter)
-        applyView(initialView)
-
-        for (const button of viewButtons) {
-          button.addEventListener("click", () => {
-            const nextView = button.dataset.viewButton === "grid" ? "grid" : "list"
-            applyView(nextView)
-          })
-        }
 
         for (const link of filterLinks) {
           link.addEventListener("click", (event) => {
