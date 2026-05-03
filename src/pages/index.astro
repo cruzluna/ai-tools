@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/main.astro"
 
-type ToolCategory = "environment" | "sandboxes" | "cli-tui" | "agents-sdk"
+type ToolCategory = "environment" | "sandboxes" | "cli-tui" | "agents-sdk" | "autonomous-agents"
 type FilterId = ToolCategory | "all"
 
 type ToolSeed = {
@@ -352,6 +352,37 @@ const agentsSdkTools: ToolSeed[] = [
   },
 ]
 
+const autonomousAgentsTools: ToolSeed[] = [
+  {
+    name: "Devin",
+    url: "https://devin.ai/",
+    domain: "devin.ai",
+    description:
+      "Cognition's autonomous AI software engineer for planning, coding, testing, and shipping.",
+  },
+  {
+    name: "Zo",
+    url: "https://zo.computer/",
+    domain: "zo.computer",
+    description:
+      "Personal AI cloud computer that runs 24/7 with persistent execution and built-in integrations.",
+  },
+  {
+    name: "OpenClaw",
+    url: "https://openclaw.ai/",
+    domain: "openclaw.ai",
+    description:
+      "Open-source autonomous AI personal assistant that runs on your devices across messaging platforms.",
+  },
+  {
+    name: "Hermes",
+    url: "https://hermes-agent.nousresearch.com/",
+    domain: "nousresearch.com",
+    description:
+      "Nous Research's self-improving autonomous agent with persistent memory and auto-generated skills.",
+  },
+]
+
 const withCategory = (category: ToolCategory, toolList: ToolSeed[]): Tool[] =>
   toolList.map((tool) => ({ ...tool, category }))
 
@@ -360,6 +391,7 @@ const tools: Tool[] = [
   ...withCategory("sandboxes", sandboxTools),
   ...withCategory("cli-tui", cliTuiTools),
   ...withCategory("agents-sdk", agentsSdkTools),
+  ...withCategory("autonomous-agents", autonomousAgentsTools),
 ].sort((a, b) => a.name.localeCompare(b.name))
 
 const categoryLabels: Record<ToolCategory, string> = {
@@ -367,6 +399,7 @@ const categoryLabels: Record<ToolCategory, string> = {
   sandboxes: "Sandboxes",
   "cli-tui": "CLI/TUI",
   "agents-sdk": "Agents SDK",
+  "autonomous-agents": "Autonomous Agents",
 }
 
 const filterPathById: Record<FilterId, string> = {
@@ -375,6 +408,7 @@ const filterPathById: Record<FilterId, string> = {
   sandboxes: "/sandboxes",
   "cli-tui": "/cli-tui",
   "agents-sdk": "/agents-sdk",
+  "autonomous-agents": "/autonomous-agents",
 }
 
 const normalizePathname = (pathname: string) =>
@@ -430,6 +464,12 @@ const filterOptions = [
     label: "Agents SDK",
     path: filterPathById["agents-sdk"],
     count: tools.filter((tool) => tool.category === "agents-sdk").length,
+  },
+  {
+    id: "autonomous-agents",
+    label: "Autonomous Agents",
+    path: filterPathById["autonomous-agents"],
+    count: tools.filter((tool) => tool.category === "autonomous-agents").length,
   },
 ] satisfies Array<{ id: FilterId; label: string; path: string; count: number }>
 
