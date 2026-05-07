@@ -1,5 +1,10 @@
 ---
+import GitHubStars from "@/components/GitHubStars.tsx"
 import Layout from "@/layouts/main.astro"
+import {
+  resolveGithubRepoForStars,
+  type GithubComHttpsUrl,
+} from "@/lib/github-repo"
 
 type ToolCategory =
   | "environment"
@@ -15,10 +20,21 @@ type ToolSeed = {
   domain: string
   description: string
   languages?: string[]
+  /**
+   * Optional `https://github.com/...` URL for star counts when `url` is not a repo path
+   * (e.g. product pages under `/features/...`). Type enforces the prefix.
+   */
+  githubStarsUrl?: GithubComHttpsUrl
 }
 
 type Tool = ToolSeed & {
   category: ToolCategory
+}
+
+function githubComTool(
+  tool: Omit<ToolSeed, "domain"> & { url: GithubComHttpsUrl }
+): ToolSeed {
+  return { ...tool, domain: "github.com" }
 }
 
 const formatLanguages = (languages?: string[]) =>
@@ -43,6 +59,7 @@ const environmentTools: ToolSeed[] = [
     name: "cmux",
     url: "https://cmux.dev",
     domain: "cmux.dev",
+    githubStarsUrl: "https://github.com/manaflow-ai/cmux",
     description:
       "A native macOS terminal built for multitasking with AI coding agents.",
   },
@@ -71,6 +88,7 @@ const environmentTools: ToolSeed[] = [
     name: "Jean",
     url: "https://jean.build/",
     domain: "jean.build",
+    githubStarsUrl: "https://github.com/coollabsio/jean",
     description:
       "Run AI agents in parallel, in isolated workspaces, with automated worktree and context loading.",
   },
@@ -85,6 +103,7 @@ const environmentTools: ToolSeed[] = [
     name: "Polyscope",
     url: "https://getpolyscope.com/",
     domain: "getpolyscope.com",
+    githubStarsUrl: "https://github.com/beyondcode/polyscope-community",
     description:
       "Desktop workspace for running and organizing multiple AI coding agents in parallel.",
   },
@@ -92,20 +111,21 @@ const environmentTools: ToolSeed[] = [
     name: "Superset",
     url: "https://superset.sh",
     domain: "superset.sh",
+    githubStarsUrl: "https://github.com/superset-sh/superset",
     description:
       "Launch and manage many parallel coding agents on your own machine.",
   },
-  {
+  githubComTool({
     name: "vibe-kanban",
     url: "https://github.com/BloopAI/vibe-kanban",
-    domain: "github.com",
     description:
       "Kanban board for planning and tracking vibe-coding tasks with AI agents.",
-  },
+  }),
   {
     name: "dmux",
     url: "https://dmux.ai",
     domain: "dmux.ai",
+    githubStarsUrl: "https://github.com/standardagents/dmux",
     description:
       "A tmux pane manager for parallel AI development sessions with worktrees.",
   },
@@ -113,6 +133,7 @@ const environmentTools: ToolSeed[] = [
     name: "Droid",
     url: "https://factory.ai/",
     domain: "factory.ai",
+    githubStarsUrl: "https://github.com/Factory-AI/factory",
     description:
       "Factory's software engineering agent for delegating codebase tasks from natural language.",
   },
@@ -120,6 +141,7 @@ const environmentTools: ToolSeed[] = [
     name: "Emdash",
     url: "https://www.emdash.sh/",
     domain: "emdash.sh",
+    githubStarsUrl: "https://github.com/generalaction/emdash",
     description:
       "Open-source desktop ADE for orchestrating multiple coding agents in parallel Git worktrees.",
   },
@@ -127,6 +149,7 @@ const environmentTools: ToolSeed[] = [
     name: "Codex GUI",
     url: "https://openai.com/codex/",
     domain: "openai.com",
+    githubStarsUrl: "https://github.com/openai/codex",
     description:
       "OpenAI's web app for coding with agents that can complete tasks end to end.",
   },
@@ -134,6 +157,7 @@ const environmentTools: ToolSeed[] = [
     name: "OpenCode Desktop",
     url: "https://opencode.ai",
     domain: "opencode.ai",
+    githubStarsUrl: "https://github.com/anomalyco/opencode",
     description:
       "Open source AI coding agent you can run in the terminal, IDE, or desktop app.",
   },
@@ -141,6 +165,7 @@ const environmentTools: ToolSeed[] = [
     name: "T3 Code",
     url: "https://t3.codes",
     domain: "t3.codes",
+    githubStarsUrl: "https://github.com/pingdotgg/t3code",
     description:
       "A focused AI coding environment positioned as a fast way to ship.",
   },
@@ -148,16 +173,16 @@ const environmentTools: ToolSeed[] = [
     name: "DPCode",
     url: "https://www.dpcode.cc/",
     domain: "dpcode.cc",
+    githubStarsUrl: "https://github.com/Emanuele-web04/dpcode",
     description:
       "Open-source desktop ADE for running multiple AI subscriptions and worktrees in one place.",
   },
-  {
+  githubComTool({
     name: "Acepe",
-    url: "https://acepe.dev/",
-    domain: "acepe.dev",
+    url: "https://github.com/flazouh/acepe",
     description:
       "Agent development environment for building with parallel AI coding workflows.",
-  },
+  }),
 ]
 
 const sandboxTools: ToolSeed[] = [
@@ -165,6 +190,7 @@ const sandboxTools: ToolSeed[] = [
     name: "CodeSandbox",
     url: "https://codesandbox.io/",
     domain: "codesandbox.io",
+    githubStarsUrl: "https://github.com/codesandbox/sandpack",
     description:
       "Cloud development sandboxes for instant, shareable coding environments.",
   },
@@ -172,6 +198,7 @@ const sandboxTools: ToolSeed[] = [
     name: "Daytona",
     url: "https://www.daytona.io/",
     domain: "daytona.io",
+    githubStarsUrl: "https://github.com/daytonaio/daytona",
     description:
       "Platform for creating secure, reproducible development sandboxes.",
   },
@@ -179,6 +206,7 @@ const sandboxTools: ToolSeed[] = [
     name: "E2B",
     url: "https://e2b.dev/",
     domain: "e2b.dev",
+    githubStarsUrl: "https://github.com/e2b-dev/E2B",
     description:
       "Open-source cloud runtime for executing AI-generated code in sandboxes.",
   },
@@ -186,6 +214,7 @@ const sandboxTools: ToolSeed[] = [
     name: "LangSmith Sandboxes",
     url: "https://blog.langchain.com/introducing-langsmith-sandboxes-secure-code-execution-for-agents/",
     domain: "langchain.com",
+    githubStarsUrl: "https://github.com/langchain-ai/langsmith-sdk",
     description:
       "Secure code execution sandboxes for agent evaluations and testing workflows.",
   },
@@ -193,6 +222,7 @@ const sandboxTools: ToolSeed[] = [
     name: "Modal",
     url: "https://modal.com/products/sandboxes",
     domain: "modal.com",
+    githubStarsUrl: "https://github.com/modal-labs/modal-client",
     description:
       "Ephemeral Python sandboxes for code execution and interactive workloads.",
   },
@@ -207,6 +237,7 @@ const sandboxTools: ToolSeed[] = [
     name: "Runloop",
     url: "https://runloop.ai",
     domain: "runloop.ai",
+    githubStarsUrl: "https://github.com/runloopai/rl-cli",
     description:
       "Cloud sandboxes for running and managing agent-generated code securely.",
   },
@@ -214,6 +245,7 @@ const sandboxTools: ToolSeed[] = [
     name: "Vercel Sandbox",
     url: "https://vercel.com/sandbox",
     domain: "vercel.com",
+    githubStarsUrl: "https://github.com/vercel/sandbox",
     description:
       "Instant cloud sandboxes for previewing and testing web projects.",
   },
@@ -224,6 +256,7 @@ const cliTuiTools: ToolSeed[] = [
     name: "Aider",
     url: "https://aider.chat/",
     domain: "aider.chat",
+    githubStarsUrl: "https://github.com/Aider-AI/aider",
     description:
       "Open source AI pair programmer that edits code directly in your repo.",
   },
@@ -245,6 +278,7 @@ const cliTuiTools: ToolSeed[] = [
     name: "Cline CLI",
     url: "https://cline.bot/cli",
     domain: "cline.bot",
+    githubStarsUrl: "https://github.com/cline/cline",
     description:
       "Command-line interface for running Cline's coding agent from your terminal.",
   },
@@ -252,16 +286,17 @@ const cliTuiTools: ToolSeed[] = [
     name: "Codex CLI",
     url: "https://developers.openai.com/codex/cli/",
     domain: "openai.com",
+    githubStarsUrl: "https://github.com/openai/codex",
     description:
       "OpenAI's command-line coding agent for terminal-native software tasks.",
   },
-  {
+  githubComTool({
     name: "Copilot CLI",
     url: "https://github.com/features/copilot/cli",
-    domain: "github.com",
+    githubStarsUrl: "https://github.com/github/copilot-cli",
     description:
       "GitHub Copilot in the terminal for generating and explaining shell commands.",
-  },
+  }),
   {
     name: "Cursor CLI",
     url: "https://cursor.com/cli",
@@ -273,6 +308,7 @@ const cliTuiTools: ToolSeed[] = [
     name: "Kiro CLI",
     url: "https://kiro.dev/cli/",
     domain: "kiro.dev",
+    githubStarsUrl: "https://github.com/kirodotdev/Kiro",
     description:
       "Kiro command-line tooling for building and shipping with AI coding agents.",
   },
@@ -280,6 +316,7 @@ const cliTuiTools: ToolSeed[] = [
     name: "OpenCode CLI",
     url: "https://opencode.ai/docs/cli/",
     domain: "opencode.ai",
+    githubStarsUrl: "https://github.com/anomalyco/opencode",
     description:
       "OpenCode's CLI for running coding sessions from the terminal.",
   },
@@ -287,6 +324,7 @@ const cliTuiTools: ToolSeed[] = [
     name: "Pi Agent",
     url: "https://shittycodingagent.ai/",
     domain: "shittycodingagent.ai",
+    githubStarsUrl: "https://github.com/badlogic/pi-mono",
     description:
       "Terminal-native AI coding agent for command-line development workflows.",
   },
@@ -297,6 +335,7 @@ const agentsSdkTools: ToolSeed[] = [
     name: "AI SDK (Vercel)",
     url: "https://ai-sdk.dev/docs/introduction",
     domain: "ai-sdk.dev",
+    githubStarsUrl: "https://github.com/vercel/ai",
     description:
       "Type-safe toolkit for building AI chat apps and agent workflows.",
     languages: ["TypeScript", "JavaScript"],
@@ -305,6 +344,7 @@ const agentsSdkTools: ToolSeed[] = [
     name: "Anthropic SDK",
     url: "https://platform.claude.com/docs/en/api/client-sdks",
     domain: "anthropic.com",
+    githubStarsUrl: "https://github.com/anthropics/anthropic-sdk-python",
     description: "Official Claude API client SDKs for production integrations.",
     languages: ["Python", "TypeScript", "Java", "Go", "Ruby", "C#", "PHP"],
   },
@@ -320,22 +360,23 @@ const agentsSdkTools: ToolSeed[] = [
     name: "OpenAI App Server",
     url: "https://developers.openai.com/codex/app-server/",
     domain: "openai.com",
+    githubStarsUrl: "https://github.com/openai/codex",
     description:
       "Codex app server for harnessing coding-agent threads via JSON-RPC.",
     languages: ["Language-agnostic protocol", "TypeScript (official SDK)"],
   },
-  {
+  githubComTool({
     name: "Kimi Agent SDK",
     url: "https://github.com/MoonshotAI/kimi-agent-sdk",
-    domain: "github.com",
     description:
       "Programmatic SDK for integrating Moonshot's Kimi agent runtime.",
     languages: ["Python", "TypeScript/Node.js", "Go"],
-  },
+  }),
   {
     name: "CrewAI",
     url: "https://crewai.com/",
     domain: "crewai.com",
+    githubStarsUrl: "https://github.com/crewAIInc/crewAI",
     description:
       "Framework for orchestrating role-based multi-agent workflows.",
     languages: ["Python"],
@@ -344,22 +385,23 @@ const agentsSdkTools: ToolSeed[] = [
     name: "Strands Agents",
     url: "https://strandsagents.com/",
     domain: "strandsagents.com",
+    githubStarsUrl: "https://github.com/strands-agents/sdk-python",
     description:
       "Model-driven SDK for composing tools, memory, and agent loops.",
     languages: ["Python", "TypeScript"],
   },
-  {
+  githubComTool({
     name: "Pi (SDK)",
     url: "https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent#programmatic-usage",
-    domain: "github.com",
     description:
       "Programmatic interface for embedding the Pi coding agent in apps.",
     languages: ["TypeScript", "JavaScript"],
-  },
+  }),
   {
     name: "OpenCode SDK",
     url: "https://opencode.ai/docs/sdk/",
     domain: "opencode.ai",
+    githubStarsUrl: "https://github.com/anomalyco/opencode",
     description: "Type-safe SDK for integrating OpenCode agents and sessions.",
     languages: ["TypeScript", "JavaScript"],
   },
@@ -367,6 +409,7 @@ const agentsSdkTools: ToolSeed[] = [
     name: "Qwen-Agent",
     url: "https://qwenlm.github.io/Qwen-Agent/",
     domain: "qwenlm.github.io",
+    githubStarsUrl: "https://github.com/QwenLM/Qwen-Agent",
     description:
       "Framework for tool use, planning, and memory with Qwen models.",
     languages: ["Python"],
@@ -375,6 +418,7 @@ const agentsSdkTools: ToolSeed[] = [
     name: "LangGraph",
     url: "https://www.langchain.com/langgraph",
     domain: "langchain.com",
+    githubStarsUrl: "https://github.com/langchain-ai/langgraph",
     description:
       "Stateful graph framework for durable, multi-step agent workflows.",
     languages: ["Python", "TypeScript"],
@@ -383,6 +427,7 @@ const agentsSdkTools: ToolSeed[] = [
     name: "PydanticAI",
     url: "https://ai.pydantic.dev/",
     domain: "ai.pydantic.dev",
+    githubStarsUrl: "https://github.com/pydantic/pydantic-ai",
     description:
       "Type-safe agent framework built around Pydantic models and validation.",
     languages: ["Python"],
@@ -391,6 +436,7 @@ const agentsSdkTools: ToolSeed[] = [
     name: "OpenAI Agents SDK",
     url: "https://developers.openai.com/api/docs/guides/agents-sdk/",
     domain: "openai.com",
+    githubStarsUrl: "https://github.com/openai/openai-agents-python",
     description:
       "OpenAI's agent orchestration SDK with tools, handoffs, and guardrails.",
     languages: ["Python", "TypeScript"],
@@ -409,6 +455,7 @@ const autonomousAgentsTools: ToolSeed[] = [
     name: "Zo",
     url: "https://zo.computer/",
     domain: "zo.computer",
+    githubStarsUrl: "https://github.com/zocomputer/Zo",
     description:
       "Personal AI cloud computer that runs 24/7 with persistent execution and built-in integrations.",
   },
@@ -416,6 +463,7 @@ const autonomousAgentsTools: ToolSeed[] = [
     name: "OpenClaw",
     url: "https://openclaw.ai/",
     domain: "openclaw.ai",
+    githubStarsUrl: "https://github.com/openclaw/openclaw",
     description:
       "Open-source autonomous AI personal assistant that runs on your devices across messaging platforms.",
   },
@@ -423,6 +471,7 @@ const autonomousAgentsTools: ToolSeed[] = [
     name: "Hermes",
     url: "https://hermes-agent.nousresearch.com/",
     domain: "nousresearch.com",
+    githubStarsUrl: "https://github.com/NousResearch/hermes-agent",
     description:
       "Nous Research's self-improving autonomous agent with persistent memory and auto-generated skills.",
   },
@@ -533,7 +582,8 @@ const issueTitle = "Add missing AI tool: [Tool Name]"
 const issueBody = `## Tool to add
 - Name:
 - Website:
-- GitHub repo:
+- GitHub repo (if any):
+- Optional \`githubStarsUrl\` (\`https://github.com/...\` only) when the listing \`url\` is not a repo path — otherwise stars use the GitHub \`url\`:
 
 ## Suggested prompt
 Please add [TOOL NAME] to the tool list.
@@ -657,7 +707,9 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
 
           <ul role="list" class="divide-y divide-zinc-800">
             {
-              tools.map((tool, index) => (
+              tools.map((tool, index) => {
+                const starsRepo = resolveGithubRepoForStars(tool)
+                return (
                 <li
                   data-tool-item
                   data-category={tool.category}
@@ -687,13 +739,18 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                           class="size-6 grayscale"
                         />
                       </span>
-                      <div class="min-w-0">
+                      <div class="min-w-0 space-y-0.5">
                         <p class="truncate text-base font-medium tracking-tight text-zinc-50">
                           {tool.name}
                         </p>
-                        <p class="truncate text-xs text-zinc-500">
-                          {tool.url.replace("https://", "")}
-                        </p>
+                        {starsRepo && (
+                          <div class="min-w-0">
+                            <GitHubStars
+                              client:load
+                              repo={starsRepo}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -713,7 +770,8 @@ const newIssueUrl = `https://github.com/cruzluna/ai-tools/issues/new?title=${enc
                     </p>
                   </a>
                 </li>
-              ))
+                )
+              })
             }
           </ul>
         </section>
